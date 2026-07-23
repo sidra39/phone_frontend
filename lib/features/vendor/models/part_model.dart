@@ -12,8 +12,10 @@ class PartModel {
   final String conditionType;
   final int stockQuantity;
   final String? imageUrl;
-  final String? qrToken;
   final String status;
+  final String? barcodeNumber;
+  final String? originalPhotoUrl;
+  final String? barcodePhotoUrl;
 
   PartModel({
     required this.id,
@@ -27,8 +29,10 @@ class PartModel {
     required this.conditionType,
     required this.stockQuantity,
     this.imageUrl,
-    this.qrToken,
     required this.status,
+    this.barcodeNumber,
+    this.originalPhotoUrl,
+    this.barcodePhotoUrl,
   });
 
   factory PartModel.fromJson(Map<String, dynamic> json) {
@@ -44,8 +48,10 @@ class PartModel {
       conditionType: json['condition_type'] ?? 'new',
       stockQuantity: json['stock_quantity'] is int ? json['stock_quantity'] : int.parse(json['stock_quantity'].toString()),
       imageUrl: json['image_url'],
-      qrToken: json['qr_token'],
       status: json['status'] ?? 'available',
+      barcodeNumber: json['barcode_number'],
+      originalPhotoUrl: json['original_photo_url'],
+      barcodePhotoUrl: json['barcode_photo_url'],
     );
   }
 
@@ -62,8 +68,10 @@ class PartModel {
       'condition_type': conditionType,
       'stock_quantity': stockQuantity,
       'image_url': imageUrl,
-      'qr_token': qrToken,
       'status': status,
+      'barcode_number': barcodeNumber,
+      'original_photo_url': originalPhotoUrl,
+      'barcode_photo_url': barcodePhotoUrl,
     };
   }
 }

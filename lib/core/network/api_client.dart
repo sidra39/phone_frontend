@@ -106,4 +106,45 @@ class ApiClient {
       rethrow;
     }
   }
+
+  /// POST/PUT Multipart request (Web & Mobile compatible)
+  Future<dynamic> postMultipart(
+    String endpoint,
+    Map<String, String> fields,
+    Map<String, Map<String, dynamic>> files, {
+    String? token,
+    bool isPut = false,
+  }) async {
+    try {
+      final request = http.MultipartRequest(
+        isPut ? 'PUT' : 'POST',
+        _buildUri(endpoint),
+      );
+
+      if (token != null && token.isNotEmpty) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      request.fields.addAll(fields);
+
+      for (final entry in files.entries) {
+        final fileData = entry.value;
+        final List<int> bytes = fileData['bytes'];
+        final String filename = fileData['filename'];
+        request.files.add(
+          http.MultipartFile.fromBytes(
+            entry.key,
+            bytes,
+            filename: filename,
+          ),
+        );
+      }
+
+      final streamedResponse = await _client.send(request);
+      final response = await http.Response.fromStream(streamedResponse);
+      return _handleResponse(response);
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

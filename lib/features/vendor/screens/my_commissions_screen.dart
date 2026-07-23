@@ -52,22 +52,24 @@ class _MyCommissionsScreenState extends State<MyCommissionsScreen> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'paid':
-        return const Color(0xff00E676);
+        return const Color(0xff16A34A);
       case 'rejected':
-        return const Color(0xffFF5252);
+        return const Color(0xffDC2626);
       case 'pending':
       default:
-        return const Color(0xffFF9100);
+        return const Color(0xffD97706);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
-        elevation: 0,
+        backgroundColor: theme.cardColor,
+        elevation: 1,
         title: const Text('Commission Obligations', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
           const NotificationBellIcon(),
@@ -99,9 +101,9 @@ class _MyCommissionsScreenState extends State<MyCommissionsScreen> {
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16.0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff1A1D27),
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xff2A2E3D)),
+                          border: Border.all(color: const Color(0xffE2E8F0)),
                         ),
                         child: Material(
                           color: Colors.transparent,
@@ -130,10 +132,10 @@ class _MyCommissionsScreenState extends State<MyCommissionsScreen> {
                                     children: [
                                       Text(
                                         '10% Fee: \$${comm.amount.toStringAsFixed(2)}',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,
-                                          color: Color(0xffFF9100),
+                                          color: theme.primaryColor,
                                         ),
                                       ),
                                       Container(
@@ -158,28 +160,28 @@ class _MyCommissionsScreenState extends State<MyCommissionsScreen> {
                                   const SizedBox(height: 10),
                                   Text(
                                     'Component: ${comm.partModelName ?? 'Part #${comm.requestId}'}',
-                                    style: TextStyle(color: Colors.grey.shade300, fontSize: 14),
+                                    style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 14),
                                   ),
                                   if (comm.paymentProofUrl != null) ...[
                                     const SizedBox(height: 6),
                                     Row(
                                       children: [
-                                        const Icon(Icons.check_circle_outline_rounded, size: 14, color: Color(0xff00E5FF)),
+                                        Icon(Icons.check_circle_outline_rounded, size: 14, color: theme.primaryColor),
                                         const SizedBox(width: 6),
-                                        Text('Payment Proof Submitted', style: TextStyle(color: Colors.grey.shade400, fontSize: 12)),
+                                        Text('Payment Proof Submitted', style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12)),
                                       ],
                                     ),
                                   ],
                                   if (isActionable) ...[
                                     const SizedBox(height: 12),
-                                    const Divider(color: Color(0xff2A2E3D), height: 1),
+                                    const Divider(color: Color(0xffE2E8F0), height: 1),
                                     const SizedBox(height: 10),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,
-                                      children: const [
-                                        Text('Submit / Update Proof', style: TextStyle(color: Color(0xffFF9100), fontWeight: FontWeight.bold, fontSize: 13)),
-                                        SizedBox(width: 6),
-                                        Icon(Icons.arrow_forward_rounded, color: Color(0xffFF9100), size: 16),
+                                      children: [
+                                        Text('Submit / Update Proof', style: TextStyle(color: theme.primaryColor, fontWeight: FontWeight.bold, fontSize: 13)),
+                                        const SizedBox(width: 6),
+                                        Icon(Icons.arrow_forward_rounded, color: theme.primaryColor, size: 16),
                                       ],
                                     ),
                                   ],

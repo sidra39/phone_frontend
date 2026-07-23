@@ -72,7 +72,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Verify Commission Payment', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: Text(
@@ -121,7 +121,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Reject Commission Proof', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: Text(
@@ -135,7 +135,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffFF5252)),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffDC2626)),
             child: const Text('Reject Proof', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
         ],
@@ -169,48 +169,48 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'paid':
-        return const Color(0xff00E676);
+        return const Color(0xff16A34A);
       case 'rejected':
-        return const Color(0xffFF5252);
+        return const Color(0xffDC2626);
       case 'pending':
       default:
-        return const Color(0xffFF9100);
+        return const Color(0xffD97706);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           // Filter Bar
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              color: Color(0xff1A1D27),
-              border: Border(bottom: BorderSide(color: Color(0xff2A2E3D))),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              border: Border(bottom: BorderSide(color: const Color(0xffCCCCCC))),
             ),
             child: Row(
               children: [
                 const Icon(Icons.payments_rounded, color: Color(0xffFF9100), size: 20),
                 const SizedBox(width: 10),
-                const Text('Commission Status:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                const Text('Commission Status:', style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff212121))),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xff12141C),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xff2A2E3D)),
+                      border: Border.all(color: const Color(0xffCCCCCC)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _selectedStatus,
-                        dropdownColor: const Color(0xff1A1D27),
+                        dropdownColor: Theme.of(context).cardColor,
                         isExpanded: true,
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: const TextStyle(color: Color(0xff212121), fontSize: 14),
                         items: const [
                           DropdownMenuItem(value: 'all', child: Text('All Commissions')),
                           DropdownMenuItem(value: 'pending', child: Text('Pending Review')),
@@ -257,9 +257,9 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
                               margin: const EdgeInsets.only(bottom: 16.0),
                               padding: const EdgeInsets.all(18.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xff1A1D27),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xff2A2E3D)),
+                                border: Border.all(color: const Color(0xffCCCCCC)),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -273,7 +273,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
                                           style: const TextStyle(
                                             fontSize: 18,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.white,
+                                            color: Color(0xff212121),
                                           ),
                                         ),
                                       ),
@@ -318,7 +318,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
                                           ),
                                           child: Text(
                                             comm.partModelName!,
-                                            style: const TextStyle(color: Colors.white, fontSize: 11),
+                                            style: const TextStyle(color: Color(0xff212121), fontSize: 11),
                                           ),
                                         ),
                                     ],
@@ -348,7 +348,7 @@ class _CommissionReviewScreenState extends State<CommissionReviewScreen> {
 
                                   if (isPendingWithProof) ...[
                                     const SizedBox(height: 16),
-                                    const Divider(color: Color(0xff2A2E3D), height: 1),
+                                    const Divider(color: Color(0xffCCCCCC), height: 1),
                                     const SizedBox(height: 14),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,

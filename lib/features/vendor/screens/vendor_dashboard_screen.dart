@@ -26,16 +26,16 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xff1A1D27),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
           border: Border(
-            top: BorderSide(color: Color(0xff2A2E3D), width: 1),
+            top: BorderSide(color: const Color(0xffCCCCCC), width: 1),
           ),
         ),
         child: BottomNavigationBar(
@@ -47,30 +47,30 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
           },
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: const Color(0xff7C4DFF),
+          selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey.shade600,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           unselectedLabelStyle: const TextStyle(fontSize: 11),
           type: BottomNavigationBarType.fixed,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.inventory_2_rounded),
-              activeIcon: Icon(Icons.inventory_2_rounded, color: Color(0xff7C4DFF)),
+              icon: const Icon(Icons.inventory_2_rounded),
+              activeIcon: Icon(Icons.inventory_2_rounded, color: Theme.of(context).primaryColor),
               label: 'My Parts',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long_rounded),
-              activeIcon: Icon(Icons.receipt_long_rounded, color: Color(0xff7C4DFF)),
+              icon: const Icon(Icons.receipt_long_rounded),
+              activeIcon: Icon(Icons.receipt_long_rounded, color: Theme.of(context).primaryColor),
               label: 'Leads',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.payments_rounded),
-              activeIcon: Icon(Icons.payments_rounded, color: Color(0xff7C4DFF)),
+              icon: const Icon(Icons.payments_rounded),
+              activeIcon: Icon(Icons.payments_rounded, color: Theme.of(context).primaryColor),
               label: 'Commissions',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.storefront_rounded),
-              activeIcon: Icon(Icons.storefront_rounded, color: Color(0xff7C4DFF)),
+              icon: const Icon(Icons.storefront_rounded),
+              activeIcon: Icon(Icons.storefront_rounded, color: Theme.of(context).primaryColor),
               label: 'Profile',
             ),
           ],

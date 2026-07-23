@@ -218,7 +218,7 @@ class _CommissionPaymentScreenState extends State<CommissionPaymentScreen> {
                           ? const SizedBox(
                               height: 20,
                               width: 20,
-                              child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                              child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xff212121)),
                             )
                           : Text(isRejected ? 'Resubmit Payment Proof' : 'Submit Payment Proof'),
                     ),

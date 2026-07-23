@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'customer_profile_screen.dart';
 import 'my_requests_screen.dart';
-import 'qr_scanner_screen.dart';
 import 'search_screen.dart';
 
 /// CustomerDashboardScreen
-/// Main customer shell managing cyber glass bottom navigation tabs: Search, My Requests, Scan QR, and Profile.
+/// Main customer shell managing bottom navigation tabs: Search, My Requests, and Profile.
 class CustomerDashboardScreen extends StatefulWidget {
   const CustomerDashboardScreen({super.key});
 
@@ -19,23 +18,22 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
   final List<Widget> _screens = const [
     SearchScreen(),
     MyRequestsScreen(),
-    QrScannerScreen(),
     CustomerProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: IndexedStack(
         index: _currentIndex,
         children: _screens,
       ),
       bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-          color: Color(0xff1A1D27),
+        decoration: BoxDecoration(
+          color: Theme.of(context).cardColor,
           border: Border(
-            top: BorderSide(color: Color(0xff2A2E3D), width: 1),
+            top: BorderSide(color: const Color(0xffCCCCCC), width: 1),
           ),
         ),
         child: BottomNavigationBar(
@@ -47,30 +45,25 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
           },
           backgroundColor: Colors.transparent,
           elevation: 0,
-          selectedItemColor: const Color(0xff00E5FF),
+          selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey.shade600,
           selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
           unselectedLabelStyle: const TextStyle(fontSize: 11),
           type: BottomNavigationBarType.fixed,
-          items: const [
+          items: [
             BottomNavigationBarItem(
-              icon: Icon(Icons.search_rounded),
-              activeIcon: Icon(Icons.search_rounded, color: Color(0xff00E5FF)),
+              icon: const Icon(Icons.search_rounded),
+              activeIcon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor),
               label: 'Search Parts',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.receipt_long_rounded),
-              activeIcon: Icon(Icons.receipt_long_rounded, color: Color(0xff00E5FF)),
+              icon: const Icon(Icons.receipt_long_rounded),
+              activeIcon: Icon(Icons.receipt_long_rounded, color: Theme.of(context).primaryColor),
               label: 'My Requests',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.qr_code_scanner_rounded),
-              activeIcon: Icon(Icons.qr_code_scanner_rounded, color: Color(0xff00E5FF)),
-              label: 'Verify QR',
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.person_rounded),
-              activeIcon: Icon(Icons.person_rounded, color: Color(0xff00E5FF)),
+              icon: const Icon(Icons.person_rounded),
+              activeIcon: Icon(Icons.person_rounded, color: Theme.of(context).primaryColor),
               label: 'Account',
             ),
           ],

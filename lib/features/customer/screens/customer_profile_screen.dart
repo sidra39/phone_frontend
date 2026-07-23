@@ -55,23 +55,20 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
     final cityController = TextEditingController(text: _profile!['city']);
     final formKey = GlobalKey<FormState>();
+    final theme = Theme.of(context);
 
     showDialog(
       context: context,
       builder: (dialogCtx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: theme.cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Update Primary City', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text('Update Primary City', style: TextStyle(color: theme.textTheme.bodyLarge?.color, fontWeight: FontWeight.bold)),
         content: Form(
           key: formKey,
           child: TextFormField(
             controller: cityController,
-            style: const TextStyle(color: Colors.white),
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               labelText: 'City Name',
-              labelStyle: const TextStyle(color: Colors.grey),
-              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff2A2E3D))),
-              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff00E5FF))),
             ),
             validator: (val) => val == null || val.trim().isEmpty ? 'Please enter city' : null,
           ),
@@ -79,7 +76,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogCtx),
-            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () async {
@@ -101,13 +98,12 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                 if (mounted) {
                   final msg = e.toString().replaceAll('Exception: ', '');
                   ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(content: Text(msg), backgroundColor: Colors.red),
+                    SnackBar(content: Text(msg), backgroundColor: theme.colorScheme.error),
                   );
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff00E5FF)),
-            child: const Text('Save Location', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            child: const Text('Save Location', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -115,6 +111,7 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
   }
 
   Widget _buildInfoTile(IconData icon, String label, String value) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
@@ -122,19 +119,19 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade900,
+              color: theme.scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: const Color(0xff00E5FF), size: 18),
+            child: Icon(icon, color: theme.primaryColor, size: 18),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 11)),
+                Text(label, style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 11)),
                 const SizedBox(height: 2),
-                Text(value, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(value, style: TextStyle(color: theme.textTheme.bodyLarge?.color, fontSize: 14, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -145,11 +142,12 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
-        elevation: 0,
+        backgroundColor: theme.cardColor,
+        elevation: 1,
         title: const Text('My Customer Account', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: const [
           NotificationBellIcon(),
@@ -168,9 +166,9 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                       Container(
                         padding: const EdgeInsets.all(20.0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff1A1D27),
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xff2A2E3D)),
+                          border: Border.all(color: const Color(0xffE2E8F0)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,10 +178,10 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                 Container(
                                   padding: const EdgeInsets.all(12),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xff00E5FF).withValues(alpha: 0.15),
+                                    color: theme.primaryColor.withValues(alpha: 0.15),
                                     shape: BoxShape.circle,
                                   ),
-                                  child: const Icon(Icons.person_rounded, color: Color(0xff00E5FF), size: 28),
+                                  child: Icon(Icons.person_rounded, color: theme.primaryColor, size: 28),
                                 ),
                                 const SizedBox(width: 14),
                                 Expanded(
@@ -192,21 +190,21 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                                     children: [
                                       Text(
                                         _profile!['name'] ?? 'Customer',
-                                        style: const TextStyle(
+                                        style: TextStyle(
                                           fontSize: 20,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                          color: theme.textTheme.bodyLarge?.color,
                                         ),
                                       ),
                                       const SizedBox(height: 2),
-                                      Text('Phone Parts Finder Buyer', style: TextStyle(color: Colors.grey.shade400, fontSize: 12)),
+                                      Text('Phone Parts Finder Buyer', style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12)),
                                     ],
                                   ),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 20),
-                            const Divider(color: Color(0xff2A2E3D), height: 1),
+                            const Divider(color: Color(0xffE2E8F0), height: 1),
                             const SizedBox(height: 16),
 
                             _buildInfoTile(Icons.email_rounded, 'Email Address', _profile!['email'] ?? 'N/A'),
@@ -222,12 +220,8 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                         height: 48,
                         child: ElevatedButton.icon(
                           onPressed: _showEditCityDialog,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff00E5FF),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
-                          icon: const Icon(Icons.edit_rounded, color: Colors.black),
-                          label: const Text('Edit Location City', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+                          icon: const Icon(Icons.edit_rounded),
+                          label: const Text('Edit Location City', style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ),
                       const SizedBox(height: 12),
@@ -243,11 +237,11 @@ class _CustomerProfileScreenState extends State<CustomerProfileScreen> {
                             );
                           },
                           style: OutlinedButton.styleFrom(
-                            foregroundColor: const Color(0xffFF5252),
-                            side: const BorderSide(color: Color(0xffFF5252)),
+                            foregroundColor: const Color(0xffDC2626),
+                            side: const BorderSide(color: Color(0xffDC2626)),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                          icon: const Icon(Icons.report_problem_rounded, color: Color(0xffFF5252)),
+                          icon: const Icon(Icons.report_problem_rounded, color: Color(0xffDC2626)),
                           label: const Text('My Reports & Complaints', style: TextStyle(fontWeight: FontWeight.bold)),
                         ),
                       ),

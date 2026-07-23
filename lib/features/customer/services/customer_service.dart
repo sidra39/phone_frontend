@@ -50,7 +50,7 @@ class CustomerService {
     if (model != null && model.trim().isNotEmpty) queryParams['model'] = model.trim();
     if (city != null && city.trim().isNotEmpty) queryParams['city'] = city.trim();
 
-    final Uri uri = Uri(path: '/customer/search', queryParameters: queryParams.isEmpty ? null : queryParams);
+    final Uri uri = Uri(path: '/parts/search', queryParameters: queryParams.isEmpty ? null : queryParams);
     final response = await _apiClient.get(uri.toString(), token: token);
 
     final List list = response['data'] ?? [];
@@ -118,10 +118,9 @@ class CustomerService {
     final List list = response['data'] ?? [];
     return list.map((item) => CategoryModel.fromJson(item)).toList();
   }
-
-  /// Verifies a part by scanning its QR token
-  Future<Map<String, dynamic>> verifyPartByQr(String qrToken) async {
-    final response = await _apiClient.get('/parts/verify/$qrToken');
+  /// Fetches public part details including authenticity fields & vendor shop info
+  Future<Map<String, dynamic>> getPartDetails(int partId) async {
+    final response = await _apiClient.get('/parts/$partId');
     return response['data'];
   }
 }

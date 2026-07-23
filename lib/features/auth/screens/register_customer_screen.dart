@@ -5,7 +5,9 @@ import '../services/auth_provider.dart';
 /// RegisterCustomerScreen
 /// Form screen for creating a new Customer account.
 class RegisterCustomerScreen extends StatefulWidget {
-  const RegisterCustomerScreen({super.key});
+  final int? returnToPartId;
+
+  const RegisterCustomerScreen({super.key, this.returnToPartId});
 
   @override
   State<RegisterCustomerScreen> createState() => _RegisterCustomerScreenState();

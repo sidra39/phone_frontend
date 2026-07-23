@@ -55,9 +55,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('$actionName Account Access', style: const TextStyle(color: Colors.white)),
+        title: Text('$actionName Account Access', style: const TextStyle(color: Color(0xff212121))),
         content: Text(
           'Are you sure you want to $actionName user "${user.name}"?',
           style: const TextStyle(color: Colors.grey),
@@ -118,50 +118,52 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
       case 'admin':
         return const Color(0xff00E5FF);
       case 'vendor':
-        return const Color(0xff7C4DFF);
+        return const Color(0xff2563EB);
       case 'customer':
       default:
-        return const Color(0xff00E676);
+        return const Color(0xff16A34A);
     }
   }
 
   Color _getStatusColor(String status) {
-    return status.toLowerCase() == 'active' ? const Color(0xff00E676) : const Color(0xffFF5252);
+    return status.toLowerCase() == 'active' ? const Color(0xff16A34A) : const Color(0xffDC2626);
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
         children: [
-          // Cyber Segment Filter Bar
+          // Segment Filter Bar
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              color: Color(0xff1A1D27),
-              border: Border(bottom: BorderSide(color: Color(0xff2A2E3D))),
+            decoration: BoxDecoration(
+              color: theme.cardColor,
+              border: const Border(bottom: BorderSide(color: Color(0xffE2E8F0))),
             ),
             child: Row(
               children: [
-                const Icon(Icons.group_work_rounded, color: Color(0xff00E676), size: 20),
+                Icon(Icons.group_work_rounded, color: theme.primaryColor, size: 20),
                 const SizedBox(width: 10),
-                const Text('Role Filter:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                Text('Role Filter:', style: TextStyle(fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xff12141C),
+                      color: theme.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xff2A2E3D)),
+                      border: Border.all(color: const Color(0xffE2E8F0)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _selectedRole,
-                        dropdownColor: const Color(0xff1A1D27),
+                        dropdownColor: Theme.of(context).cardColor,
                         isExpanded: true,
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: const TextStyle(color: Color(0xff212121), fontSize: 14),
                         items: const [
                           DropdownMenuItem(value: 'all', child: Text('All Account Roles')),
                           DropdownMenuItem(value: 'customer', child: Text('Customers Only')),
@@ -207,9 +209,9 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                               margin: const EdgeInsets.only(bottom: 14.0),
                               padding: const EdgeInsets.all(16.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xff1A1D27),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xff2A2E3D)),
+                                border: Border.all(color: const Color(0xffCCCCCC)),
                               ),
                               child: Row(
                                 children: [
@@ -239,7 +241,7 @@ class _UserManagementScreenState extends State<UserManagementScreen> {
                                               style: const TextStyle(
                                                 fontSize: 16,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white,
+                                                color: Color(0xff212121),
                                               ),
                                             ),
                                             const SizedBox(width: 8),

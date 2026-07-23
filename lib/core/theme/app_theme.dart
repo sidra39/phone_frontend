@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 
 /// AppTheme
-/// Centralized dark theme definition for the Phone Parts Finder application.
-/// Strictly dark-only with a black & gray color scheme.
+/// Centralized modern mobile theme definition for the Phone Parts Finder application.
+/// Clean, high-contrast light design system optimized for mobile displays.
 class AppTheme {
-  AppTheme._(); // Private constructor to prevent instantiation
+  AppTheme._();
 
-  // Theme colors
-  static const Color backgroundColor = Color(0xff121212); // Near-black
-  static const Color surfaceColor = Color(0xff1E1E1E); // Dark gray
-  static const Color primaryColor = Color(0xff9E9E9E); // Medium gray (accent/buttons)
-  
-  static const Color primaryTextColor = Color(0xffF5F5F5); // White/light gray
-  static const Color secondaryTextColor = Color(0xffB0B0B0); // Medium light gray
-  
-  static const Color errorColor = Color(0xffCF6679); // Dark mode standard error color
+  // Color Tokens
+  static const Color primaryColor = Color(0xff2563EB); // Tech Blue
+  static const Color primaryDark = Color(0xff1E40AF);
+  static const Color backgroundColor = Color(0xffFAFAFA); // Soft White
+  static const Color surfaceColor = Color(0xffF1F5F9); // Light Slate Surface
+  static const Color cardColor = Color(0xffFFFFFF); // Pure White Card
+  static const Color primaryTextColor = Color(0xff0F172A); // Deep Slate Text
+  static const Color secondaryTextColor = Color(0xff64748B); // Muted Slate Text
+  static const Color borderColor = Color(0xffE2E8F0); // Light Slate Border
+  static const Color errorColor = Color(0xffDC2626); // Clean Red
+  static const Color successColor = Color(0xff16A34A); // Clean Green
 
   static ThemeData get appTheme {
     return ThemeData(
       useMaterial3: true,
-      brightness: Brightness.dark,
+      brightness: Brightness.light,
       primaryColor: primaryColor,
       scaffoldBackgroundColor: backgroundColor,
       cardColor: surfaceColor,
-      dialogTheme: const DialogThemeData(
-        backgroundColor: surfaceColor,
+      dialogTheme: DialogThemeData(
+        backgroundColor: cardColor,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
-      colorScheme: const ColorScheme.dark(
+      colorScheme: const ColorScheme.light(
         primary: primaryColor,
         secondary: primaryColor,
         surface: surfaceColor,
@@ -35,37 +39,51 @@ class AppTheme {
 
       // Text Theme
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: primaryTextColor),
-        bodyMedium: TextStyle(color: secondaryTextColor),
-        titleLarge: TextStyle(color: primaryTextColor, fontWeight: FontWeight.bold),
+        bodyLarge: TextStyle(color: primaryTextColor, fontSize: 16),
+        bodyMedium: TextStyle(color: secondaryTextColor, fontSize: 14),
+        titleLarge: TextStyle(color: primaryTextColor, fontWeight: FontWeight.bold, fontSize: 20),
       ),
 
       // AppBar Theme
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
-        elevation: 0,
+        backgroundColor: cardColor,
+        foregroundColor: primaryTextColor,
+        elevation: 1,
+        shadowColor: Color(0x1A000000),
         centerTitle: true,
         titleTextStyle: TextStyle(
           color: primaryTextColor,
-          fontSize: 20,
+          fontSize: 18,
           fontWeight: FontWeight.bold,
         ),
-        iconTheme: IconThemeData(color: Colors.white),
+        iconTheme: IconThemeData(color: primaryTextColor),
       ),
 
-      // Button Theme
+      // Button Theme (Mobile 48px+ touch targets)
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: primaryColor,
-          foregroundColor: Colors.black, // Dark text on gray button for contrast
+          foregroundColor: Colors.white,
+          elevation: 0,
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
-            fontSize: 16,
+            fontSize: 15,
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+            borderRadius: BorderRadius.circular(12),
+          ),
+        ),
+      ),
+
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          foregroundColor: primaryColor,
+          side: const BorderSide(color: borderColor),
+          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
         ),
       ),
@@ -74,37 +92,39 @@ class AppTheme {
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: surfaceColor,
-        hintStyle: const TextStyle(color: secondaryTextColor),
-        labelStyle: const TextStyle(color: secondaryTextColor),
-        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+        hintStyle: const TextStyle(color: secondaryTextColor, fontSize: 14),
+        labelStyle: const TextStyle(color: secondaryTextColor, fontSize: 14),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: primaryColor),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderColor),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.grey),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: borderColor),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
-          borderSide: const BorderSide(color: Colors.white, width: 2),
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: primaryColor, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: errorColor),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: errorColor, width: 2),
         ),
       ),
 
       // Card Theme
       cardTheme: CardThemeData(
-        color: surfaceColor,
-        elevation: 2,
+        color: cardColor,
+        elevation: 1,
+        shadowColor: const Color(0x0F000000),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(16),
+          side: const BorderSide(color: borderColor),
         ),
       ),
     );

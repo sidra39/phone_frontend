@@ -52,9 +52,9 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Approve Vendor Application', style: TextStyle(color: Colors.white)),
+        title: const Text('Approve Vendor Application', style: TextStyle(color: Color(0xff212121))),
         content: Text(
           'Are you sure you want to approve "${vendor.shopName}"?',
           style: const TextStyle(color: Colors.grey),
@@ -101,9 +101,9 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text('Reject Vendor Application', style: TextStyle(color: Colors.white)),
+        title: const Text('Reject Vendor Application', style: TextStyle(color: Color(0xff212121))),
         content: Text(
           'Are you sure you want to reject "${vendor.shopName}"?',
           style: const TextStyle(color: Colors.grey),
@@ -149,48 +149,50 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'approved':
-        return const Color(0xff00E676);
+        return const Color(0xff16A34A);
       case 'rejected':
-        return const Color(0xffFF5252);
+        return const Color(0xffDC2626);
       case 'pending':
       default:
-        return const Color(0xffFFC400);
+        return const Color(0xffD97706);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
         children: [
-          // Cyber Segment Filter Bar
+          // Segment Filter Bar
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              color: Color(0xff1A1D27),
-              border: Border(bottom: BorderSide(color: Color(0xff2A2E3D))),
+            decoration: BoxDecoration(
+              color: theme.cardColor,
+              border: const Border(bottom: BorderSide(color: Color(0xffE2E8F0))),
             ),
             child: Row(
               children: [
-                const Icon(Icons.filter_alt_rounded, color: Color(0xff7C4DFF), size: 20),
+                Icon(Icons.filter_alt_rounded, color: theme.primaryColor, size: 20),
                 const SizedBox(width: 10),
-                const Text('Status Filter:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                Text('Status Filter:', style: TextStyle(fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xff12141C),
+                      color: Theme.of(context).scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xff2A2E3D)),
+                      border: Border.all(color: const Color(0xffCCCCCC)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _selectedStatus,
-                        dropdownColor: const Color(0xff1A1D27),
+                        dropdownColor: Theme.of(context).cardColor,
                         isExpanded: true,
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: const TextStyle(color: Color(0xff212121), fontSize: 14),
                         items: const [
                           DropdownMenuItem(value: 'all', child: Text('All Vendor Applications')),
                           DropdownMenuItem(value: 'pending', child: Text('Pending Approval')),
@@ -236,9 +238,9 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
                               margin: const EdgeInsets.only(bottom: 16.0),
                               padding: const EdgeInsets.all(18.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xff1A1D27),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xff2A2E3D)),
+                                border: Border.all(color: const Color(0xffCCCCCC)),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -264,7 +266,7 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
                                                 style: const TextStyle(
                                                   fontSize: 18,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.white,
+                                                  color: Color(0xff212121),
                                                 ),
                                               ),
                                             ),
@@ -299,7 +301,7 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
                                       const SizedBox(width: 8),
                                       Text(
                                         vendor.ownerName,
-                                        style: const TextStyle(color: Colors.white, fontWeight: FontWeight.w500),
+                                        style: const TextStyle(color: Color(0xff212121), fontWeight: FontWeight.w500),
                                       ),
                                       const SizedBox(width: 8),
                                       Text('(${vendor.email})', style: TextStyle(color: Colors.grey.shade400, fontSize: 13)),
@@ -320,7 +322,7 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
                                         ),
                                         child: Text(
                                           vendor.city,
-                                          style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold),
+                                          style: const TextStyle(color: Color(0xff212121), fontSize: 11, fontWeight: FontWeight.bold),
                                         ),
                                       ),
                                       const SizedBox(width: 8),
@@ -347,7 +349,7 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
 
                                   if (isPending) ...[
                                     const SizedBox(height: 16),
-                                    const Divider(color: Color(0xff2A2E3D), height: 1),
+                                    const Divider(color: Color(0xffCCCCCC), height: 1),
                                     const SizedBox(height: 14),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,

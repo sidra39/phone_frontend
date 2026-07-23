@@ -64,9 +64,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: const Text('Leave Shop Review', style: TextStyle(fontWeight: FontWeight.bold)),
       ),
@@ -79,9 +79,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xff1A1D27),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xff2A2E3D)),
+                border: Border.all(color: const Color(0xffCCCCCC)),
               ),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -91,7 +91,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Color(0xff212121),
                     ),
                   ),
                   const SizedBox(height: 6),
@@ -108,15 +108,15 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             Container(
               padding: const EdgeInsets.all(20.0),
               decoration: BoxDecoration(
-                color: const Color(0xff1A1D27),
+                color: Theme.of(context).cardColor,
                 borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: const Color(0xff2A2E3D)),
+                border: Border.all(color: const Color(0xffCCCCCC)),
               ),
               child: Column(
                 children: [
                   const Text(
                     'Rate Your Experience',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff212121)),
                   ),
                   const SizedBox(height: 14),
 
@@ -151,7 +151,7 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
             // Comment Field
             TextFormField(
               controller: _commentController,
-              style: const TextStyle(color: Colors.white),
+              style: const TextStyle(color: Color(0xff212121)),
               maxLines: 4,
               decoration: InputDecoration(
                 labelText: 'Comment / Review (Optional)',
@@ -159,10 +159,10 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 labelStyle: const TextStyle(color: Colors.grey),
                 hintStyle: TextStyle(color: Colors.grey.shade600),
                 filled: true,
-                fillColor: const Color(0xff1A1D27),
+                fillColor: Theme.of(context).cardColor,
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),
-                  borderSide: const BorderSide(color: Color(0xff2A2E3D)),
+                  borderSide: const BorderSide(color: Color(0xffCCCCCC)),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(14),

@@ -12,7 +12,7 @@ import 'user_management_screen.dart';
 import 'vendor_management_screen.dart';
 
 /// AdminDashboardScreen
-/// Premium shell for administrative control featuring a cyber-sleek Drawer navigation menu across all 6 sections.
+/// Shell for administrative control featuring a Drawer navigation menu across all 6 sections.
 class AdminDashboardScreen extends StatefulWidget {
   const AdminDashboardScreen({super.key});
 
@@ -32,14 +32,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     'Reports & Complaints',
   ];
 
-  final List<Widget> _screens = const [
-    DashboardStatsScreen(),
-    VendorManagementScreen(),
-    UserManagementScreen(),
-    CategoryManagementScreen(),
-    CommissionReviewScreen(),
-    ReportReviewScreen(),
-  ];
+
 
   Widget _buildDrawerItem({
     required IconData icon,
@@ -48,6 +41,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     required Color accentColor,
   }) {
     final isSelected = _currentIndex == index;
+    final theme = Theme.of(context);
 
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 4.0),
@@ -75,7 +69,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               children: [
                 Icon(
                   icon,
-                  color: isSelected ? accentColor : Colors.grey.shade400,
+                  color: isSelected ? accentColor : Colors.grey.shade600,
                   size: 22,
                 ),
                 const SizedBox(width: 14),
@@ -85,7 +79,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     style: TextStyle(
                       fontSize: 15,
                       fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
-                      color: isSelected ? Colors.white : Colors.grey.shade300,
+                      color: isSelected ? theme.textTheme.bodyLarge?.color : theme.textTheme.bodyMedium?.color,
                     ),
                   ),
                 ),
@@ -116,12 +110,24 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<AuthProvider>(context).currentUser;
+    final theme = Theme.of(context);
+
+    final List<Widget> screens = [
+      DashboardStatsScreen(onTabChanged: (idx) {
+        setState(() => _currentIndex = idx);
+      }),
+      const VendorManagementScreen(),
+      const UserManagementScreen(),
+      const CategoryManagementScreen(),
+      const CommissionReviewScreen(),
+      const ReportReviewScreen(),
+    ];
 
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
-        elevation: 0,
+        backgroundColor: theme.cardColor,
+        elevation: 1,
         centerTitle: false,
         title: Text(
           _titles[_currentIndex],
@@ -139,21 +145,17 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
         ],
       ),
       drawer: Drawer(
-        backgroundColor: const Color(0xff161822),
+        backgroundColor: theme.cardColor,
         child: Column(
           children: [
-            // Modern Header
+            // Header
             Container(
               width: double.infinity,
               padding: const EdgeInsets.only(top: 50, bottom: 20, left: 20, right: 20),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [Color(0xff1F2332), Color(0xff161822)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-                border: Border(
-                  bottom: BorderSide(color: Color(0xff2A2E3D), width: 1),
+              decoration: BoxDecoration(
+                color: theme.scaffoldBackgroundColor,
+                border: const Border(
+                  bottom: BorderSide(color: Color(0xffCCCCCC), width: 1),
                 ),
               ),
               child: Column(
@@ -166,20 +168,20 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           gradient: const LinearGradient(
-                            colors: [Color(0xff00E5FF), Color(0xff7C4DFF)],
+                            colors: [Color(0xff757575), Color(0xffCCCCCC)],
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xff00E5FF).withValues(alpha: 0.3),
+                              color: const Color(0xff757575).withValues(alpha: 0.2),
                               blurRadius: 10,
                               spreadRadius: 2,
                             ),
                           ],
                         ),
-                        child: const CircleAvatar(
+                        child: CircleAvatar(
                           radius: 28,
-                          backgroundColor: Color(0xff1A1D27),
-                          child: Icon(Icons.admin_panel_settings, size: 30, color: Color(0xff00E5FF)),
+                          backgroundColor: theme.cardColor,
+                          child: const Icon(Icons.admin_panel_settings, size: 30, color: Color(0xff757575)),
                         ),
                       ),
                       const SizedBox(width: 14),
@@ -189,10 +191,10 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           children: [
                             Text(
                               user?.name ?? 'Super Admin',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 17,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: theme.textTheme.bodyLarge?.color,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -200,16 +202,16 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                               decoration: BoxDecoration(
-                                color: const Color(0xff00E5FF).withValues(alpha: 0.15),
+                                color: const Color(0xff757575).withValues(alpha: 0.15),
                                 borderRadius: BorderRadius.circular(8),
-                                border: Border.all(color: const Color(0xff00E5FF).withValues(alpha: 0.5)),
+                                border: Border.all(color: const Color(0xff757575).withValues(alpha: 0.5)),
                               ),
                               child: const Text(
                                 'SYSTEM ADMIN',
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
-                                  color: Color(0xff00E5FF),
+                                  color: Color(0xff757575),
                                   letterSpacing: 1.0,
                                 ),
                               ),
@@ -222,7 +224,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                   const SizedBox(height: 16),
                   Text(
                     user?.email ?? 'admin@phonepartsfinder.com',
-                    style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
+                    style: TextStyle(fontSize: 12, color: theme.textTheme.bodyMedium?.color),
                   ),
                 ],
               ),
@@ -239,43 +241,43 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     icon: Icons.grid_view_rounded,
                     title: 'Dashboard Overview',
                     index: 0,
-                    accentColor: const Color(0xff00E5FF),
+                    accentColor: const Color(0xff757575),
                   ),
                   _buildDrawerItem(
                     icon: Icons.storefront_rounded,
                     title: 'Vendor Management',
                     index: 1,
-                    accentColor: const Color(0xff7C4DFF),
+                    accentColor: const Color(0xff757575),
                   ),
                   _buildDrawerItem(
                     icon: Icons.group_rounded,
                     title: 'User Directory',
                     index: 2,
-                    accentColor: const Color(0xff00E676),
+                    accentColor: const Color(0xff757575),
                   ),
                   _buildDrawerItem(
                     icon: Icons.category_rounded,
                     title: 'Category Manager',
                     index: 3,
-                    accentColor: const Color(0xffFFC400),
+                    accentColor: const Color(0xff757575),
                   ),
                   _buildDrawerItem(
                     icon: Icons.payments_rounded,
                     title: 'Commissions Review',
                     index: 4,
-                    accentColor: const Color(0xffFF9100),
+                    accentColor: const Color(0xff757575),
                   ),
                   _buildDrawerItem(
                     icon: Icons.shield_outlined,
                     title: 'Reports & Complaints',
                     index: 5,
-                    accentColor: const Color(0xffFF5252),
+                    accentColor: const Color(0xff757575),
                   ),
                 ],
               ),
             ),
 
-            const Divider(color: Color(0xff2A2E3D), height: 1),
+            const Divider(color: Color(0xffCCCCCC), height: 1),
 
             // Logout Footer
             Padding(
@@ -307,7 +309,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       ),
       body: IndexedStack(
         index: _currentIndex,
-        children: _screens,
+        children: screens,
       ),
     );
   }

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/constants/api_constants.dart';
 import '../../../core/widgets/notification_bell_icon.dart';
 import '../../auth/services/auth_provider.dart';
 import '../models/part_model.dart';
 import '../services/vendor_service.dart';
 import 'add_edit_part_screen.dart';
-import 'part_qr_screen.dart';
 
 /// MyPartsScreen
 /// Displays vendor inventory list with cyber-glassmorphic cards, price tags, QR actions, and stock badges.
@@ -54,7 +54,7 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Delete Inventory Part', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: const Text('Are you sure you want to delete this part listing?', style: TextStyle(color: Colors.grey)),
@@ -99,9 +99,9 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: const Text('Parts Inventory', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -122,18 +122,18 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
                       Container(
                         padding: const EdgeInsets.all(20),
                         decoration: BoxDecoration(
-                          color: const Color(0xff7C4DFF).withValues(alpha: 0.15),
+                          color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
                           shape: BoxShape.circle,
                         ),
-                        child: const Icon(Icons.inventory_2_outlined, size: 48, color: Color(0xff7C4DFF)),
+                        child: Icon(Icons.inventory_2_outlined, size: 48, color: Theme.of(context).primaryColor),
                       ),
                       const SizedBox(height: 16),
-                      const Text(
+                      Text(
                         'No parts listed in inventory',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Theme.of(context).textTheme.bodyLarge?.color),
                       ),
                       const SizedBox(height: 6),
-                      Text('Start listing phone components for customer search', style: TextStyle(color: Colors.grey.shade400)),
+                      Text('Start listing phone components for customer search', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
                       const SizedBox(height: 20),
                       ElevatedButton.icon(
                         onPressed: () async {
@@ -145,13 +145,8 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
                             _loadParts();
                           }
                         },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff7C4DFF),
-                          padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                        ),
-                        icon: const Icon(Icons.add_rounded, color: Colors.white),
-                        label: const Text('Add Your First Part', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                        icon: const Icon(Icons.add_rounded),
+                        label: const Text('Add Your First Part'),
                       ),
                     ],
                   ),
@@ -164,64 +159,109 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
                     itemBuilder: (context, index) {
                       final part = _parts[index];
                       final isAvailable = part.status == 'available';
+                      final imageUrl = part.originalPhotoUrl != null
+                          ? '${ApiConstants.baseUrl}${part.originalPhotoUrl}'
+                          : null;
 
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16.0),
-                        padding: const EdgeInsets.all(18.0),
+                        padding: const EdgeInsets.all(16.0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff1A1D27),
+                          color: Theme.of(context).cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xff2A2E3D)),
+                          border: Border.all(color: const Color(0xffCCCCCC)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    part.modelName,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
+                                // Thumbnail Image
+                                Container(
+                                  width: 70,
+                                  height: 70,
+                                  decoration: BoxDecoration(
+                                    color: Theme.of(context).scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(color: const Color(0xffCCCCCC)),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: imageUrl != null
+                                        ? Image.network(
+                                            imageUrl,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (ctx, err, stack) => const Icon(Icons.image_not_supported_rounded, color: Colors.grey),
+                                          )
+                                        : const Icon(Icons.image_search_rounded, color: Colors.grey),
                                   ),
                                 ),
-                                Text(
-                                  '\$${part.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xff00E5FF),
+                                const SizedBox(width: 14),
+                                // Text Details
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              part.modelName,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: Theme.of(context).textTheme.bodyLarge?.color,
+                                              ),
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          ),
+                                          Text(
+                                            '\$${part.price.toStringAsFixed(2)}',
+                                            style: TextStyle(
+                                              fontSize: 18,
+                                              fontWeight: FontWeight.bold,
+                                              color: Theme.of(context).primaryColor,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        '${part.brandName ?? 'Brand #${part.brandId}'} • ${part.partTypeName ?? 'Type #${part.partTypeId}'}',
+                                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
+                                      ),
+                                      if (part.barcodeNumber != null && part.barcodeNumber!.isNotEmpty) ...[
+                                        const SizedBox(height: 4),
+                                        Text(
+                                          'Barcode: ${part.barcodeNumber}',
+                                          style: TextStyle(color: Colors.grey.shade500, fontSize: 11, fontFamily: 'monospace'),
+                                        ),
+                                      ],
+                                    ],
                                   ),
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              '${part.brandName ?? 'Brand #${part.brandId}'} • ${part.partTypeName ?? 'Type #${part.partTypeId}'}',
-                              style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
-                            ),
                             const SizedBox(height: 12),
-
                             Row(
                               children: [
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
                                   decoration: BoxDecoration(
-                                    color: const Color(0xff7C4DFF).withValues(alpha: 0.15),
+                                    color: Theme.of(context).primaryColor.withValues(alpha: 0.15),
                                     borderRadius: BorderRadius.circular(8),
-                                    border: Border.all(color: const Color(0xff7C4DFF).withValues(alpha: 0.4)),
+                                    border: Border.all(color: Theme.of(context).primaryColor.withValues(alpha: 0.4)),
                                   ),
                                   child: Text(
                                     part.conditionType.toUpperCase(),
-                                    style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Color(0xff7C4DFF)),
+                                    style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Theme.of(context).primaryColor),
                                   ),
                                 ),
                                 const SizedBox(width: 10),
-                                Text('Stock: ${part.stockQuantity}', style: TextStyle(color: Colors.grey.shade400, fontSize: 13)),
+                                Text('Stock: ${part.stockQuantity}', style: TextStyle(color: Colors.grey.shade600, fontSize: 13)),
                                 const Spacer(),
                                 Container(
                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
@@ -248,30 +288,12 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
                               ],
                             ),
                             const SizedBox(height: 14),
-                            const Divider(color: Color(0xff2A2E3D), height: 1),
+                            const Divider(color: Color(0xffCCCCCC), height: 1),
                             const SizedBox(height: 12),
 
                             Row(
                               mainAxisAlignment: MainAxisAlignment.end,
                               children: [
-                                OutlinedButton.icon(
-                                  onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (_) => PartQrScreen(part: part),
-                                      ),
-                                    );
-                                  },
-                                  icon: const Icon(Icons.qr_code_rounded, size: 16),
-                                  label: const Text('QR Code'),
-                                  style: OutlinedButton.styleFrom(
-                                    foregroundColor: const Color(0xff00E5FF),
-                                    side: const BorderSide(color: Color(0xff00E5FF)),
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                                  ),
-                                ),
-                                const SizedBox(width: 8),
                                 OutlinedButton.icon(
                                   onPressed: () async {
                                     final result = await Navigator.push(
@@ -288,7 +310,7 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
                                   label: const Text('Edit'),
                                   style: OutlinedButton.styleFrom(
                                     foregroundColor: Colors.white,
-                                    side: const BorderSide(color: Color(0xff2A2E3D)),
+                                    side: const BorderSide(color: Color(0xffCCCCCC)),
                                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                   ),
                                 ),

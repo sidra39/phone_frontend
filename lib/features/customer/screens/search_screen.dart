@@ -117,7 +117,7 @@ class _SearchScreenState extends State<SearchScreen> {
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            backgroundColor: const Color(0xff1A1D27),
+            backgroundColor: Theme.of(context).cardColor,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             title: const Text('Request Sent to Vendor', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
             content: Text(
@@ -150,14 +150,10 @@ class _SearchScreenState extends State<SearchScreen> {
       labelStyle: const TextStyle(color: Colors.grey, fontSize: 13),
       isDense: true,
       filled: true,
-      fillColor: const Color(0xff12141C),
-      enabledBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xff2A2E3D)),
+      fillColor: Theme.of(context).scaffoldBackgroundColor,
+      enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffCCCCCC)),
       ),
-      focusedBorder: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(10),
-        borderSide: const BorderSide(color: Color(0xff00E5FF)),
+      focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff00E5FF)),
       ),
     );
   }
@@ -165,9 +161,9 @@ class _SearchScreenState extends State<SearchScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: const Text('Search Phone Parts', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: const [
@@ -180,7 +176,7 @@ class _SearchScreenState extends State<SearchScreen> {
               children: [
                 // Filter Panel
                 Container(
-                  color: const Color(0xff1A1D27),
+                  color: Theme.of(context).cardColor,
                   padding: const EdgeInsets.all(16.0),
                   child: Column(
                     children: [
@@ -189,8 +185,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               initialValue: _selectedBrandId,
-                              dropdownColor: const Color(0xff1A1D27),
-                              style: const TextStyle(color: Colors.white, fontSize: 13),
+                              dropdownColor: Theme.of(context).cardColor,
+                              style: const TextStyle(color: Color(0xff212121), fontSize: 13),
                               decoration: _buildInputDecoration('Brand'),
                               items: [
                                 const DropdownMenuItem<int>(value: null, child: Text('All Brands')),
@@ -203,8 +199,8 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             child: DropdownButtonFormField<int>(
                               initialValue: _selectedPartTypeId,
-                              dropdownColor: const Color(0xff1A1D27),
-                              style: const TextStyle(color: Colors.white, fontSize: 13),
+                              dropdownColor: Theme.of(context).cardColor,
+                              style: const TextStyle(color: Color(0xff212121), fontSize: 13),
                               decoration: _buildInputDecoration('Part Type'),
                               items: [
                                 const DropdownMenuItem<int>(value: null, child: Text('All Types')),
@@ -221,7 +217,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             child: TextField(
                               controller: _modelController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13),
+                              style: const TextStyle(color: Color(0xff212121), fontSize: 13),
                               decoration: _buildInputDecoration('Model Name'),
                             ),
                           ),
@@ -229,7 +225,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           Expanded(
                             child: TextField(
                               controller: _cityController,
-                              style: const TextStyle(color: Colors.white, fontSize: 13),
+                              style: const TextStyle(color: Color(0xff212121), fontSize: 13),
                               decoration: _buildInputDecoration('City'),
                             ),
                           ),
@@ -297,13 +293,14 @@ class _SearchScreenState extends State<SearchScreen> {
                                   itemCount: _searchResults.length,
                                   itemBuilder: (context, index) {
                                     final part = _searchResults[index];
+                                    final theme = Theme.of(context);
                                     return Container(
                                       margin: const EdgeInsets.only(bottom: 16.0),
                                       padding: const EdgeInsets.all(18.0),
                                       decoration: BoxDecoration(
-                                        color: const Color(0xff1A1D27),
+                                        color: theme.cardColor,
                                         borderRadius: BorderRadius.circular(16),
-                                        border: Border.all(color: const Color(0xff2A2E3D)),
+                                        border: Border.all(color: const Color(0xffE2E8F0)),
                                       ),
                                       child: Column(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -314,19 +311,19 @@ class _SearchScreenState extends State<SearchScreen> {
                                               Expanded(
                                                 child: Text(
                                                   part.modelName,
-                                                  style: const TextStyle(
+                                                  style: TextStyle(
                                                     fontSize: 18,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.white,
+                                                    color: theme.textTheme.bodyLarge?.color,
                                                   ),
                                                 ),
                                               ),
                                               Text(
                                                 '\$${part.price.toStringAsFixed(2)}',
-                                                style: const TextStyle(
+                                                style: TextStyle(
                                                   fontSize: 20,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Color(0xff00E5FF),
+                                                  color: theme.primaryColor,
                                                 ),
                                               ),
                                             ],
@@ -334,7 +331,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                           const SizedBox(height: 6),
                                           Text(
                                             '${part.brandName ?? 'Brand'} • ${part.partTypeName ?? 'Type'} • ${part.conditionType.toUpperCase()}',
-                                            style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+                                            style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 13),
                                           ),
                                           const SizedBox(height: 12),
                                           Row(
@@ -344,7 +341,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                               Expanded(
                                                 child: Text(
                                                   '${part.shopName} (${part.vendorCity})',
-                                                  style: const TextStyle(fontWeight: FontWeight.w600, color: Colors.white),
+                                                  style: TextStyle(fontWeight: FontWeight.w600, color: theme.textTheme.bodyLarge?.color),
                                                 ),
                                               ),
                                               const Icon(Icons.star_rounded, size: 18, color: Colors.amber),
@@ -356,15 +353,15 @@ class _SearchScreenState extends State<SearchScreen> {
                                             ],
                                           ),
                                           const SizedBox(height: 14),
-                                          const Divider(color: Color(0xff2A2E3D), height: 1),
+                                          const Divider(color: Color(0xffE2E8F0), height: 1),
                                           const SizedBox(height: 12),
                                           Align(
                                             alignment: Alignment.centerRight,
                                             child: ElevatedButton.icon(
                                               onPressed: () => _handleRequest(part),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: const Color(0xff00E5FF),
-                                                foregroundColor: Colors.black,
+                                                backgroundColor: theme.primaryColor,
+                                                foregroundColor: Colors.white,
                                                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                                               ),
                                               icon: const Icon(Icons.send_rounded, size: 16),

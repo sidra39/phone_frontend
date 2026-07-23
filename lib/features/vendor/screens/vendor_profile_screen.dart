@@ -62,7 +62,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
     showDialog(
       context: context,
       builder: (dialogCtx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: const Text('Edit Shop Profile', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         content: SingleChildScrollView(
@@ -73,11 +73,11 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
               children: [
                 TextFormField(
                   controller: shopNameController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xff212121)),
                   decoration: InputDecoration(
                     labelText: 'Shop Name',
                     labelStyle: const TextStyle(color: Colors.grey),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff2A2E3D))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffCCCCCC))),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff7C4DFF))),
                   ),
                   validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
@@ -85,11 +85,11 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: cityController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xff212121)),
                   decoration: InputDecoration(
                     labelText: 'City',
                     labelStyle: const TextStyle(color: Colors.grey),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff2A2E3D))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffCCCCCC))),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff7C4DFF))),
                   ),
                   validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
@@ -97,11 +97,11 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                 const SizedBox(height: 12),
                 TextFormField(
                   controller: addressController,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Color(0xff212121)),
                   decoration: InputDecoration(
                     labelText: 'Address',
                     labelStyle: const TextStyle(color: Colors.grey),
-                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff2A2E3D))),
+                    enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffCCCCCC))),
                     focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xff7C4DFF))),
                   ),
                   validator: (val) => val == null || val.trim().isEmpty ? 'Required' : null,
@@ -166,6 +166,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
   }
 
   Widget _buildInfoTile(IconData icon, String label, String value) {
+    final theme = Theme.of(context);
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Row(
@@ -173,19 +174,19 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.grey.shade900,
+              color: theme.scaffoldBackgroundColor,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: const Color(0xff7C4DFF), size: 18),
+            child: Icon(icon, color: theme.primaryColor, size: 18),
           ),
           const SizedBox(width: 14),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(label, style: TextStyle(color: Colors.grey.shade500, fontSize: 11)),
+                Text(label, style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 11)),
                 const SizedBox(height: 2),
-                Text(value, style: const TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w500)),
+                Text(value, style: TextStyle(color: theme.textTheme.bodyLarge?.color, fontSize: 14, fontWeight: FontWeight.w500)),
               ],
             ),
           ),
@@ -196,13 +197,14 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     final user = Provider.of<AuthProvider>(context).currentUser;
 
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
-        elevation: 0,
+        backgroundColor: theme.cardColor,
+        elevation: 1,
         title: const Text('Vendor Shop Profile', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: const [
           NotificationBellIcon(),
@@ -221,9 +223,9 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                       Container(
                         padding: const EdgeInsets.all(20.0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff1A1D27),
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xff2A2E3D)),
+                          border: Border.all(color: const Color(0xffE2E8F0)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -237,10 +239,10 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                                       Container(
                                         padding: const EdgeInsets.all(12),
                                         decoration: BoxDecoration(
-                                          color: const Color(0xff7C4DFF).withValues(alpha: 0.15),
+                                          color: theme.primaryColor.withValues(alpha: 0.15),
                                           shape: BoxShape.circle,
                                         ),
-                                        child: const Icon(Icons.storefront_rounded, color: Color(0xff7C4DFF), size: 28),
+                                        child: Icon(Icons.storefront_rounded, color: theme.primaryColor, size: 28),
                                       ),
                                       const SizedBox(width: 14),
                                       Expanded(
@@ -252,7 +254,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                                               style: const TextStyle(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.white,
+                                                color: Color(0xff212121),
                                               ),
                                             ),
                                             const SizedBox(height: 2),
@@ -282,7 +284,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                               ],
                             ),
                             const SizedBox(height: 20),
-                            const Divider(color: Color(0xff2A2E3D), height: 1),
+                            const Divider(color: Color(0xffCCCCCC), height: 1),
                             const SizedBox(height: 16),
 
                             _buildInfoTile(Icons.person_rounded, 'Owner Name', user?.name ?? 'N/A'),
@@ -303,7 +305,7 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                             backgroundColor: const Color(0xff7C4DFF),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           ),
-                          icon: const Icon(Icons.edit_rounded, color: Colors.white),
+                          icon: const Icon(Icons.edit_rounded, color: Color(0xff212121)),
                           label: const Text('Edit Shop Details', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
                         ),
                       ),

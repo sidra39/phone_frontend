@@ -6,13 +6,16 @@ import '../../admin/screens/admin_dashboard_screen.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
 import '../../notifications/services/notification_provider.dart';
 import '../../vendor/screens/vendor_dashboard_screen.dart';
+import '../../browse/screens/part_detail_screen.dart';
 import 'register_customer_screen.dart';
 import 'register_vendor_screen.dart';
 
 /// LoginScreen
-/// Entry point for authenticating users featuring cyber glass styling and official PPF branding logo.
+/// Entry point for authenticating users featuring official PPF branding logo.
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+  final int? returnToPartId;
+
+  const LoginScreen({super.key, this.returnToPartId});
 
   @override
   State<LoginScreen> createState() => _LoginScreenState();
@@ -76,12 +79,21 @@ class _LoginScreenState extends State<LoginScreen> {
           return;
         }
       } else if (user.role == 'customer') {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (_) => const CustomerDashboardScreen(),
-          ),
-        );
+        if (widget.returnToPartId != null) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => PartDetailScreen(partId: widget.returnToPartId!),
+            ),
+          );
+        } else {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const CustomerDashboardScreen(),
+            ),
+          );
+        }
         return;
       }
     } catch (e) {
@@ -101,15 +113,14 @@ class _LoginScreenState extends State<LoginScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(ctx).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        content: Text(message, style: const TextStyle(color: Colors.grey)),
+        title: Text(title, style: const TextStyle(fontWeight: FontWeight.bold)),
+        content: Text(message),
         actions: [
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff00E5FF)),
-            child: const Text('OK', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            child: const Text('OK'),
           ),
         ],
       ),
@@ -121,7 +132,6 @@ class _LoginScreenState extends State<LoginScreen> {
     final isLoading = Provider.of<AuthProvider>(context).isLoading;
 
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0, vertical: 36.0),
@@ -131,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                // Header Logo
+                // Header Logo (Uses custom vector text logic styled to light background compatibility)
                 const AppLogo(
                   iconSize: 90,
                   fontSize: 24,
@@ -142,9 +152,9 @@ class _LoginScreenState extends State<LoginScreen> {
                 Container(
                   padding: const EdgeInsets.all(22.0),
                   decoration: BoxDecoration(
-                    color: const Color(0xff1A1D27),
+                    color: Theme.of(context).cardColor,
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: const Color(0xff2A2E3D)),
+                    border: Border.all(color: const Color(0xffCCCCCC)),
                   ),
                   child: Column(
                     children: [
@@ -153,34 +163,21 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: TextStyle(
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
                         ),
                       ),
                       const SizedBox(height: 6),
                       Text(
                         'Sign in to access parts & lead requests',
-                        style: TextStyle(color: Colors.grey.shade400, fontSize: 13),
+                        style: TextStyle(color: Colors.grey.shade600, fontSize: 13),
                       ),
                       const SizedBox(height: 24),
 
                       TextFormField(
                         controller: _emailController,
-                        style: const TextStyle(color: Colors.white),
                         keyboardType: TextInputType.emailAddress,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Email Address',
-                          prefixIcon: const Icon(Icons.email_rounded, color: Color(0xff00E5FF), size: 20),
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          filled: true,
-                          fillColor: const Color(0xff12141C),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xff2A2E3D)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xff00E5FF)),
-                          ),
+                          prefixIcon: Icon(Icons.email_rounded, size: 20),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -197,22 +194,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                       TextFormField(
                         controller: _passwordController,
-                        style: const TextStyle(color: Colors.white),
                         obscureText: true,
-                        decoration: InputDecoration(
+                        decoration: const InputDecoration(
                           labelText: 'Password',
-                          prefixIcon: const Icon(Icons.lock_rounded, color: Color(0xff00E5FF), size: 20),
-                          labelStyle: const TextStyle(color: Colors.grey),
-                          filled: true,
-                          fillColor: const Color(0xff12141C),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xff2A2E3D)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: const BorderSide(color: Color(0xff00E5FF)),
-                          ),
+                          prefixIcon: Icon(Icons.lock_rounded, size: 20),
                         ),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -228,20 +213,16 @@ class _LoginScreenState extends State<LoginScreen> {
                         height: 50,
                         child: ElevatedButton(
                           onPressed: isLoading ? null : _handleLogin,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: const Color(0xff00E5FF),
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                          ),
                           child: isLoading
                               ? const SizedBox(
                                   height: 22,
                                   width: 22,
                                   child: CircularProgressIndicator(
                                     strokeWidth: 2,
-                                    color: Colors.black,
+                                    color: Colors.white,
                                   ),
                                 )
-                              : const Text('Sign In', style: TextStyle(color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+                              : const Text('Sign In'),
                         ),
                       ),
                     ],
@@ -257,12 +238,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) => const RegisterCustomerScreen(),
+                            builder: (_) => RegisterCustomerScreen(returnToPartId: widget.returnToPartId),
                           ),
                         );
                       },
-                      icon: const Icon(Icons.person_add_rounded, size: 18, color: Color(0xff00E5FF)),
-                      label: const Text('Customer Signup', style: TextStyle(color: Color(0xff00E5FF), fontWeight: FontWeight.bold)),
+                      icon: Icon(Icons.person_add_rounded, size: 18, color: Theme.of(context).primaryColor),
+                      label: Text('Customer Signup', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
                     ),
                     TextButton.icon(
                       onPressed: () {
@@ -273,8 +254,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           ),
                         );
                       },
-                      icon: const Icon(Icons.storefront_rounded, size: 18, color: Color(0xff7C4DFF)),
-                      label: const Text('Vendor Signup', style: TextStyle(color: Color(0xff7C4DFF), fontWeight: FontWeight.bold)),
+                      icon: Icon(Icons.storefront_rounded, size: 18, color: Theme.of(context).primaryColor),
+                      label: Text('Vendor Signup', style: TextStyle(color: Theme.of(context).primaryColor, fontWeight: FontWeight.bold)),
                     ),
                   ],
                 ),

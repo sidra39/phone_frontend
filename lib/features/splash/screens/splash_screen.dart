@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/app_logo.dart';
 import '../../admin/screens/admin_dashboard_screen.dart';
-import '../../auth/screens/login_screen.dart';
+import '../../browse/screens/browse_home_screen.dart';
 import '../../auth/services/auth_provider.dart';
 import '../../customer/screens/customer_dashboard_screen.dart';
 import '../../vendor/screens/vendor_dashboard_screen.dart';
@@ -89,7 +89,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(
-          pageBuilder: (context, anim1, anim2) => const LoginScreen(),
+          pageBuilder: (context, anim1, anim2) => const BrowseHomeScreen(),
           transitionsBuilder: (context, animation, secondaryAnimation, child) {
             return FadeTransition(opacity: animation, child: child);
           },
@@ -102,7 +102,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Stack(
         children: [
           // Background ambient cyan glow circle top right
@@ -119,7 +119,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             ),
           ),
 
-          // Background ambient violet glow circle bottom left
+          // Background ambient primary glow circle bottom left
           Positioned(
             bottom: -80,
             left: -60,
@@ -128,7 +128,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
               height: 260,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: const Color(0xff7C4DFF).withValues(alpha: 0.08),
+                color: Theme.of(context).primaryColor.withValues(alpha: 0.08),
               ),
             ),
           ),
@@ -154,7 +154,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                   child: Text(
                     'Direct Vendor Marketplace & Component Verifier',
                     style: TextStyle(
-                      color: Colors.grey.shade400,
+                      color: Theme.of(context).textTheme.bodyMedium?.color,
                       fontSize: 13,
                       letterSpacing: 0.4,
                     ),
@@ -171,12 +171,12 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
             right: 0,
             child: Column(
               children: [
-                const SizedBox(
+                SizedBox(
                   width: 24,
                   height: 24,
                   child: CircularProgressIndicator(
                     strokeWidth: 2.5,
-                    color: Color(0xff00E5FF),
+                    color: Theme.of(context).primaryColor,
                   ),
                 ),
                 const SizedBox(height: 14),

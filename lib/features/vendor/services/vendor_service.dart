@@ -32,14 +32,34 @@ class VendorService {
   }
 
   /// Adds a new part
-  Future<PartModel> addPart(String token, Map<String, dynamic> fields) async {
-    final response = await _apiClient.post('/vendor/parts', fields, token: token);
+  Future<PartModel> addPart(
+    String token,
+    Map<String, String> fields,
+    Map<String, Map<String, dynamic>> files,
+  ) async {
+    final response = await _apiClient.postMultipart(
+      '/vendor/parts',
+      fields,
+      files,
+      token: token,
+    );
     return PartModel.fromJson(response['data']);
   }
 
   /// Updates an existing part
-  Future<PartModel> updatePart(String token, int id, Map<String, dynamic> fields) async {
-    final response = await _apiClient.put('/vendor/parts/$id', fields, token: token);
+  Future<PartModel> updatePart(
+    String token,
+    int id,
+    Map<String, String> fields,
+    Map<String, Map<String, dynamic>> files,
+  ) async {
+    final response = await _apiClient.postMultipart(
+      '/vendor/parts/$id',
+      fields,
+      files,
+      token: token,
+      isPut: true,
+    );
     return PartModel.fromJson(response['data']);
   }
 

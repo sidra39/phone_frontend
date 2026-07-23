@@ -6,6 +6,7 @@ import '../../reports/screens/submit_report_screen.dart';
 import '../models/request_model.dart';
 import '../services/customer_service.dart';
 import 'add_review_screen.dart';
+import 'qr_scanner_screen.dart';
 
 /// MyRequestsScreen
 /// Displays customer request history with glowing status badges and review/report actions.
@@ -67,9 +68,9 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: const Text('My Component Requests', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
@@ -99,13 +100,15 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                       final bool canReview = req.status == 'responded' || req.status == 'available';
                       final statusColor = _getStatusColor(req.status);
 
+                      final theme = Theme.of(context);
+
                       return Container(
                         margin: const EdgeInsets.only(bottom: 16.0),
                         padding: const EdgeInsets.all(18.0),
                         decoration: BoxDecoration(
-                          color: const Color(0xff1A1D27),
+                          color: theme.cardColor,
                           borderRadius: BorderRadius.circular(16),
-                          border: Border.all(color: const Color(0xff2A2E3D)),
+                          border: Border.all(color: const Color(0xffE2E8F0)),
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -116,10 +119,10 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                 Expanded(
                                   child: Text(
                                     req.modelName,
-                                    style: const TextStyle(
-                                      fontSize: 18,
+                                    style: TextStyle(
+                                      fontSize: 17,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: theme.textTheme.bodyLarge?.color,
                                     ),
                                   ),
                                 ),
@@ -145,12 +148,12 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                             const SizedBox(height: 8),
                             Text(
                               'Shop: ${req.shopName} (${req.vendorCity})',
-                              style: TextStyle(color: Colors.grey.shade300, fontWeight: FontWeight.w500, fontSize: 14),
+                              style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontWeight: FontWeight.w500, fontSize: 13),
                             ),
                             if (req.vendorAddress.isNotEmpty)
                               Text(
                                 req.vendorAddress,
-                                style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                                style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
                               ),
                             const SizedBox(height: 10),
                             Row(
@@ -158,24 +161,27 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                               children: [
                                 Text(
                                   'Price: \$${req.price.toStringAsFixed(2)}',
-                                  style: const TextStyle(
+                                  style: TextStyle(
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff00E5FF),
+                                    color: theme.primaryColor,
                                     fontSize: 15,
                                   ),
                                 ),
                                 Text(
                                   req.createdAt.split('T').first,
-                                  style: TextStyle(color: Colors.grey.shade500, fontSize: 12),
+                                  style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
                                 ),
                               ],
                             ),
                             const SizedBox(height: 14),
-                            const Divider(color: Color(0xff2A2E3D), height: 1),
+                            const Divider(color: Color(0xffE2E8F0), height: 1),
                             const SizedBox(height: 12),
 
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            Wrap(
+                              alignment: WrapAlignment.spaceBetween,
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: 8,
+                              runSpacing: 8,
                               children: [
                                 TextButton.icon(
                                   onPressed: () {
@@ -189,10 +195,31 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                       ),
                                     );
                                   },
-                                  icon: const Icon(Icons.report_problem_rounded, size: 16, color: Color(0xffFF5252)),
-                                  label: const Text('Report Vendor', style: TextStyle(color: Color(0xffFF5252), fontSize: 12, fontWeight: FontWeight.bold)),
+                                  icon: const Icon(Icons.report_problem_rounded, size: 16, color: Color(0xffDC2626)),
+                                  label: const Text('Report Vendor', style: TextStyle(color: Color(0xffDC2626), fontSize: 12, fontWeight: FontWeight.bold)),
                                 ),
-                                if (canReview)
+                                if (canReview) ...[
+                                  ElevatedButton.icon(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (_) => QrScannerScreen(
+                                            partId: req.partId,
+                                            requestId: req.id,
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: theme.primaryColor,
+                                      foregroundColor: Colors.white,
+                                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                                    ),
+                                    icon: const Icon(Icons.qr_code_scanner_rounded, size: 16),
+                                    label: const Text('Verify Delivery', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
+                                  ),
                                   ElevatedButton.icon(
                                     onPressed: () async {
                                       final updated = await Navigator.push(
@@ -209,10 +236,12 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                       backgroundColor: Colors.amber,
                                       foregroundColor: Colors.black,
                                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     ),
-                                    icon: const Icon(Icons.star_rounded, size: 18, color: Colors.black),
-                                    label: const Text('Leave Review', style: TextStyle(fontWeight: FontWeight.bold)),
+                                    icon: const Icon(Icons.star_rounded, size: 16, color: Colors.black),
+                                    label: const Text('Review', style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold)),
                                   ),
+                                ],
                               ],
                             ),
                           ],

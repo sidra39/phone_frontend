@@ -109,7 +109,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     contentPadding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 8.0),
                     leading: CircleAvatar(
                       backgroundColor: isUnread ? Colors.white24 : Colors.white10,
-                      child: Icon(_getTypeIcon(notif.type), color: Colors.white),
+                      child: Icon(_getTypeIcon(notif.type), color: Color(0xff212121)),
                     ),
                     title: Text(
                       notif.message,

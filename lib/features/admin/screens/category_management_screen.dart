@@ -75,24 +75,20 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
     showDialog(
       context: context,
       builder: (dialogCtx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text(title, style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text(title, style: const TextStyle(color: Color(0xff212121), fontWeight: FontWeight.bold)),
         content: Form(
           key: formKey,
           child: TextFormField(
             controller: nameController,
-            style: const TextStyle(color: Colors.white),
+            style: const TextStyle(color: Color(0xff212121)),
             decoration: InputDecoration(
               labelText: 'Category Name',
               labelStyle: const TextStyle(color: Colors.grey),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Color(0xff2A2E3D)),
+              enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffCCCCCC)),
               ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Color(0xffFFC400)),
+              focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(10), borderSide: const BorderSide(color: Color(0xffFFC400)),
               ),
             ),
             validator: (val) => val == null || val.trim().isEmpty ? 'Please enter a name' : null,
@@ -144,8 +140,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
                 }
               }
             },
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffFFC400)),
-            child: const Text('Save Record', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold)),
+            child: const Text('Save Record', style: TextStyle(fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -157,18 +152,18 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('Delete $typeName', style: const TextStyle(color: Colors.white)),
-        content: Text('Are you sure you want to delete "${item.name}"?', style: const TextStyle(color: Colors.grey)),
+        title: Text('Delete $typeName', style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color)),
+        content: Text('Are you sure you want to delete "${item.name}"?', style: TextStyle(color: Theme.of(context).textTheme.bodyMedium?.color)),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancel', style: TextStyle(color: Colors.grey)),
+            child: const Text('Cancel'),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(ctx, true),
-            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffFF5252)),
+            style: ElevatedButton.styleFrom(backgroundColor: const Color(0xffDC2626)),
             child: const Text('Delete Record', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
         ],
@@ -216,9 +211,9 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
         return Container(
           margin: const EdgeInsets.only(bottom: 12.0),
           decoration: BoxDecoration(
-            color: const Color(0xff1A1D27),
+            color: Theme.of(context).cardColor,
             borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: const Color(0xff2A2E3D)),
+            border: Border.all(color: const Color(0xffCCCCCC)),
           ),
           child: ListTile(
             contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
@@ -236,7 +231,7 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
             ),
             title: Text(
               item.name,
-              style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.white, fontSize: 16),
+              style: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xff212121), fontSize: 16),
             ),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
@@ -260,22 +255,22 @@ class _CategoryManagementScreenState extends State<CategoryManagementScreen> wit
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Column(
         children: [
           // Cyber Tab Header
           Container(
             padding: const EdgeInsets.all(12),
-            decoration: const BoxDecoration(
-              color: Color(0xff1A1D27),
-              border: Border(bottom: BorderSide(color: Color(0xff2A2E3D))),
+            decoration: BoxDecoration(
+              color: Theme.of(context).cardColor,
+              border: Border(bottom: BorderSide(color: const Color(0xffCCCCCC))),
             ),
             child: Container(
               height: 44,
               decoration: BoxDecoration(
-                color: const Color(0xff12141C),
+                color: Theme.of(context).scaffoldBackgroundColor,
                 borderRadius: BorderRadius.circular(12),
-                border: Border.all(color: const Color(0xff2A2E3D)),
+                border: Border.all(color: const Color(0xffCCCCCC)),
               ),
               child: TabBar(
                 controller: _tabController,

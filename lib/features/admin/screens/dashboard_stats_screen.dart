@@ -6,7 +6,9 @@ import '../services/admin_service.dart';
 /// DashboardStatsScreen
 /// Displays statistical count cards for total vendors, customers, parts, requests, and pending approvals.
 class DashboardStatsScreen extends StatefulWidget {
-  const DashboardStatsScreen({super.key});
+  final Function(int)? onTabChanged;
+
+  const DashboardStatsScreen({super.key, this.onTabChanged});
 
   @override
   State<DashboardStatsScreen> createState() => _DashboardStatsScreenState();
@@ -51,88 +53,100 @@ class _DashboardStatsScreenState extends State<DashboardStatsScreen> {
     required int value,
     required IconData icon,
     required Color accentColor,
+    required VoidCallback onTap,
     String? subtitle,
   }) {
-    return Container(
-      decoration: BoxDecoration(
-        color: const Color(0xff1A1D27),
+    final theme = Theme.of(context);
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: accentColor.withValues(alpha: 0.25), width: 1.5),
-        boxShadow: [
-          BoxShadow(
-            color: accentColor.withValues(alpha: 0.05),
-            blurRadius: 12,
-            spreadRadius: 2,
+        child: Container(
+          decoration: BoxDecoration(
+            color: theme.cardColor,
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(color: accentColor.withValues(alpha: 0.25), width: 1.5),
+            boxShadow: [
+              BoxShadow(
+                color: accentColor.withValues(alpha: 0.05),
+                blurRadius: 12,
+                spreadRadius: 2,
+              ),
+            ],
           ),
-        ],
-      ),
-      padding: const EdgeInsets.all(18.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(
-                  color: accentColor.withValues(alpha: 0.15),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(icon, size: 24, color: accentColor),
-              ),
-              if (subtitle != null)
-                Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-                  decoration: BoxDecoration(
-                    color: accentColor.withValues(alpha: 0.15),
-                    borderRadius: BorderRadius.circular(10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: accentColor.withValues(alpha: 0.15),
+                      shape: BoxShape.circle,
+                    ),
+                    child: Icon(icon, size: 20, color: accentColor),
                   ),
-                  child: Text(
-                    subtitle,
+                  if (subtitle != null)
+                    Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        color: accentColor.withValues(alpha: 0.15),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        subtitle,
+                        style: TextStyle(
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                          color: accentColor,
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    value.toString(),
                     style: TextStyle(
-                      fontSize: 10,
+                      fontSize: 26,
                       fontWeight: FontWeight.bold,
-                      color: accentColor,
+                      color: theme.textTheme.bodyLarge?.color,
+                      letterSpacing: 0.5,
                     ),
                   ),
-                ),
-            ],
-          ),
-          const SizedBox(height: 12),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                value.toString(),
-                style: const TextStyle(
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
-                  letterSpacing: 0.5,
-                ),
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: TextStyle(
-                  fontSize: 13,
-                  fontWeight: FontWeight.w500,
-                  color: Colors.grey.shade400,
-                ),
+                  const SizedBox(height: 2),
+                  Text(
+                    label,
+                    style: TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
           : _stats == null
@@ -157,49 +171,45 @@ class _DashboardStatsScreenState extends State<DashboardStatsScreen> {
                         // System Status Header Card
                         Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(18),
                           decoration: BoxDecoration(
-                            gradient: const LinearGradient(
-                              colors: [Color(0xff1F2332), Color(0xff1A1D27)],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                            color: theme.cardColor,
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(color: const Color(0xff2A2E3D)),
+                            border: Border.all(color: const Color(0xffE2E8F0)),
                           ),
                           child: Row(
                             children: [
                               Container(
-                                padding: const EdgeInsets.all(12),
+                                padding: const EdgeInsets.all(10),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xff00E5FF).withValues(alpha: 0.15),
+                                  color: theme.primaryColor.withValues(alpha: 0.15),
                                   borderRadius: BorderRadius.circular(12),
                                 ),
-                                child: const Icon(Icons.analytics_rounded, color: Color(0xff00E5FF), size: 28),
+                                child: Icon(Icons.analytics_rounded, color: theme.primaryColor, size: 24),
                               ),
-                              const SizedBox(width: 16),
+                              const SizedBox(width: 14),
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    const Text(
+                                    Text(
                                       'Platform Live Analytics',
                                       style: TextStyle(
-                                        fontSize: 18,
+                                        fontSize: 16,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.white,
+                                        color: theme.textTheme.bodyLarge?.color,
                                       ),
                                     ),
-                                    const SizedBox(height: 4),
+                                    const SizedBox(height: 2),
                                     Text(
                                       'Real-time metrics for inventory, users & leads',
-                                      style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
+                                      style: TextStyle(fontSize: 11, color: theme.textTheme.bodyMedium?.color),
                                     ),
                                   ],
                                 ),
                               ),
                               IconButton(
-                                icon: const Icon(Icons.refresh, color: Colors.grey),
+                                icon: const Icon(Icons.refresh, color: Colors.grey, size: 20),
                                 onPressed: _loadStats,
                                 tooltip: 'Refresh Analytics',
                               ),
@@ -208,108 +218,120 @@ class _DashboardStatsScreenState extends State<DashboardStatsScreen> {
                         ),
                         const SizedBox(height: 24),
 
-                        const Text(
+                        Text(
                           'Key Performance Metrics',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 15,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: theme.textTheme.bodyLarge?.color,
                             letterSpacing: 0.5,
                           ),
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 14),
 
-                        // Stats Grid
+                        // Stats Grid (optimized childAspectRatio to 1.35 to prevent text overflow on mobile)
                         GridView.count(
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           crossAxisCount: 2,
-                          crossAxisSpacing: 16,
-                          mainAxisSpacing: 16,
-                          childAspectRatio: 1.1,
+                          crossAxisSpacing: 14,
+                          mainAxisSpacing: 14,
+                          childAspectRatio: 1.35,
                           children: [
                             _buildStatCard(
                               label: 'Total Vendors',
                               value: _stats!.totalVendors,
                               icon: Icons.storefront_rounded,
-                              accentColor: const Color(0xff7C4DFF),
+                              accentColor: theme.primaryColor,
                               subtitle: 'ACTIVE SHOPS',
+                              onTap: () => widget.onTabChanged?.call(1), // Navigates to Vendor Management
                             ),
                             _buildStatCard(
                               label: 'Total Customers',
                               value: _stats!.totalCustomers,
                               icon: Icons.group_rounded,
-                              accentColor: const Color(0xff00E676),
+                              accentColor: theme.primaryColor,
                               subtitle: 'BUYERS',
+                              onTap: () => widget.onTabChanged?.call(2), // Navigates to User Directory
                             ),
                             _buildStatCard(
                               label: 'Parts Listed',
                               value: _stats!.totalParts,
                               icon: Icons.build_circle_rounded,
-                              accentColor: const Color(0xff00E5FF),
+                              accentColor: theme.primaryColor,
                               subtitle: 'INVENTORY',
+                              onTap: () => widget.onTabChanged?.call(3), // Navigates to Category Manager
                             ),
                             _buildStatCard(
                               label: 'Part Requests',
                               value: _stats!.totalRequests,
                               icon: Icons.receipt_long_rounded,
-                              accentColor: const Color(0xffFF9100),
+                              accentColor: theme.primaryColor,
                               subtitle: 'LEADS',
+                              onTap: () => widget.onTabChanged?.call(4), // Navigates to Commission Review
                             ),
                           ],
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: 20),
 
-                        // Pending Approvals Banner
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.all(18),
-                          decoration: BoxDecoration(
-                            color: _stats!.pendingVendorApprovals > 0
-                                ? const Color(0xffFFC400).withValues(alpha: 0.12)
-                                : const Color(0xff1A1D27),
+                        // Pending Approvals Banner (Clickable)
+                        Material(
+                          color: Colors.transparent,
+                          child: InkWell(
+                            onTap: () => widget.onTabChanged?.call(1), // Navigates to Vendor Management
                             borderRadius: BorderRadius.circular(16),
-                            border: Border.all(
-                              color: _stats!.pendingVendorApprovals > 0
-                                  ? const Color(0xffFFC400).withValues(alpha: 0.4)
-                                  : const Color(0xff2A2E3D),
-                            ),
-                          ),
-                          child: Row(
-                            children: [
-                              Icon(
-                                Icons.pending_actions_rounded,
+                            child: Container(
+                              width: double.infinity,
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
                                 color: _stats!.pendingVendorApprovals > 0
-                                    ? const Color(0xffFFC400)
-                                    : Colors.grey,
-                                size: 30,
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      '${_stats!.pendingVendorApprovals} Pending Vendor Approvals',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.bold,
-                                        color: _stats!.pendingVendorApprovals > 0
-                                            ? const Color(0xffFFC400)
-                                            : Colors.white,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 2),
-                                    Text(
-                                      _stats!.pendingVendorApprovals > 0
-                                          ? 'Action required: Review documents in Vendor Management'
-                                          : 'All vendor applications up to date',
-                                      style: TextStyle(fontSize: 12, color: Colors.grey.shade400),
-                                    ),
-                                  ],
+                                    ? const Color(0xffD97706).withValues(alpha: 0.12)
+                                    : theme.cardColor,
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(
+                                  color: _stats!.pendingVendorApprovals > 0
+                                      ? const Color(0xffD97706).withValues(alpha: 0.4)
+                                      : const Color(0xffE2E8F0),
                                 ),
                               ),
-                            ],
+                              child: Row(
+                                children: [
+                                  Icon(
+                                    Icons.pending_actions_rounded,
+                                    color: _stats!.pendingVendorApprovals > 0
+                                        ? const Color(0xffD97706)
+                                        : Colors.grey,
+                                    size: 26,
+                                  ),
+                                  const SizedBox(width: 14),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          '${_stats!.pendingVendorApprovals} Pending Vendor Approvals',
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.bold,
+                                            color: _stats!.pendingVendorApprovals > 0
+                                                ? const Color(0xffD97706)
+                                                : theme.textTheme.bodyLarge?.color,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 2),
+                                        Text(
+                                          _stats!.pendingVendorApprovals > 0
+                                              ? 'Action required: Review documents in Vendor Management'
+                                              : 'All vendor applications up to date',
+                                          style: TextStyle(fontSize: 11, color: theme.textTheme.bodyMedium?.color),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const Icon(Icons.chevron_right_rounded, color: Colors.grey, size: 20),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ],

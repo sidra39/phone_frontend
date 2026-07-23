@@ -54,9 +54,9 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
     final confirmed = await showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xff1A1D27),
+        backgroundColor: Theme.of(context).cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: Text('${isResolve ? 'Resolve' : 'Dismiss'} Report', style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+        title: Text('${isResolve ? 'Resolve' : 'Dismiss'} Report', style: const TextStyle(color: Color(0xff212121), fontWeight: FontWeight.bold)),
         content: Text(
           'Are you sure you want to mark this complaint as $action?',
           style: const TextStyle(color: Colors.grey),
@@ -115,48 +115,50 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'resolved':
-        return const Color(0xff00E676);
+        return const Color(0xff16A34A);
       case 'dismissed':
-        return const Color(0xffFF5252);
+        return const Color(0xff64748B);
       case 'pending':
       default:
-        return const Color(0xffFFC400);
+        return const Color(0xffD97706);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xff12141C),
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Column(
         children: [
           // Filter Bar
           Container(
             padding: const EdgeInsets.all(16.0),
-            decoration: const BoxDecoration(
-              color: Color(0xff1A1D27),
-              border: Border(bottom: BorderSide(color: Color(0xff2A2E3D))),
+            decoration: BoxDecoration(
+              color: theme.cardColor,
+              border: const Border(bottom: BorderSide(color: Color(0xffE2E8F0))),
             ),
             child: Row(
               children: [
-                const Icon(Icons.shield_outlined, color: Color(0xffFF5252), size: 20),
+                const Icon(Icons.shield_outlined, color: Color(0xffDC2626), size: 20),
                 const SizedBox(width: 10),
-                const Text('Complaint Status:', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white)),
+                Text('Complaint Status:', style: TextStyle(fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color)),
                 const SizedBox(width: 16),
                 Expanded(
                   child: Container(
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     decoration: BoxDecoration(
-                      color: const Color(0xff12141C),
+                      color: theme.scaffoldBackgroundColor,
                       borderRadius: BorderRadius.circular(10),
-                      border: Border.all(color: const Color(0xff2A2E3D)),
+                      border: Border.all(color: const Color(0xffE2E8F0)),
                     ),
                     child: DropdownButtonHideUnderline(
                       child: DropdownButton<String>(
                         value: _selectedStatusFilter,
-                        dropdownColor: const Color(0xff1A1D27),
+                        dropdownColor: theme.cardColor,
                         isExpanded: true,
-                        style: const TextStyle(color: Colors.white, fontSize: 14),
+                        style: TextStyle(color: theme.textTheme.bodyLarge?.color, fontSize: 14),
                         items: const [
                           DropdownMenuItem(value: 'all', child: Text('All Complaint Reports')),
                           DropdownMenuItem(value: 'pending', child: Text('Pending Review')),
@@ -202,9 +204,9 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
                               margin: const EdgeInsets.only(bottom: 16.0),
                               padding: const EdgeInsets.all(18.0),
                               decoration: BoxDecoration(
-                                color: const Color(0xff1A1D27),
+                                color: Theme.of(context).cardColor,
                                 borderRadius: BorderRadius.circular(16),
-                                border: Border.all(color: const Color(0xff2A2E3D)),
+                                border: Border.all(color: const Color(0xffCCCCCC)),
                               ),
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -218,7 +220,7 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
                                           style: const TextStyle(
                                             fontSize: 17,
                                             fontWeight: FontWeight.bold,
-                                            color: Colors.white,
+                                            color: Color(0xff212121),
                                           ),
                                         ),
                                       ),
@@ -281,7 +283,7 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
                                           ),
                                           child: Text(
                                             'Request #${report.requestId}',
-                                            style: const TextStyle(color: Colors.white, fontSize: 12),
+                                            style: const TextStyle(color: Color(0xff212121), fontSize: 12),
                                           ),
                                         ),
                                     ],
@@ -293,9 +295,9 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
                                     width: double.infinity,
                                     padding: const EdgeInsets.all(12),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xff12141C),
+                                      color: Theme.of(context).scaffoldBackgroundColor,
                                       borderRadius: BorderRadius.circular(10),
-                                      border: Border.all(color: const Color(0xff2A2E3D)),
+                                      border: Border.all(color: const Color(0xffCCCCCC)),
                                     ),
                                     child: Text(
                                       report.description,
@@ -305,7 +307,7 @@ class _ReportReviewScreenState extends State<ReportReviewScreen> {
 
                                   if (isPending) ...[
                                     const SizedBox(height: 16),
-                                    const Divider(color: Color(0xff2A2E3D), height: 1),
+                                    const Divider(color: Color(0xffCCCCCC), height: 1),
                                     const SizedBox(height: 14),
                                     Row(
                                       mainAxisAlignment: MainAxisAlignment.end,

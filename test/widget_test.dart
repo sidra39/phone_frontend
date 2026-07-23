@@ -3,7 +3,7 @@ import 'package:frontend/main.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('SplashScreen loads and transitions to LoginScreen', (WidgetTester tester) async {
+  testWidgets('SplashScreen loads and transitions to BrowseHomeScreen', (WidgetTester tester) async {
     SharedPreferences.setMockInitialValues({});
 
     // Build app with SplashScreen
@@ -22,9 +22,7 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 700));
 
-    // Verify that LoginScreen welcome text is displayed
-    expect(find.text('Welcome Back'), findsOneWidget);
-    expect(find.text('Customer Signup'), findsOneWidget);
-    expect(find.text('Vendor Signup'), findsOneWidget);
+    // Verify that BrowseHomeScreen text is displayed
+    expect(find.text('Login'), findsOneWidget);
   });
 }

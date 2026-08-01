@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'customer_profile_screen.dart';
 import 'my_requests_screen.dart';
 import 'search_screen.dart';
+import '../../chat/screens/chat_rooms_screen.dart';
 
 /// CustomerDashboardScreen
 /// Main customer shell managing bottom navigation tabs: Search, My Requests, and Profile.
@@ -18,6 +19,7 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
   final List<Widget> _screens = const [
     SearchScreen(),
     MyRequestsScreen(),
+    ChatRoomsScreen(),
     CustomerProfileScreen(),
   ];
 
@@ -60,6 +62,11 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
               icon: const Icon(Icons.receipt_long_rounded),
               activeIcon: Icon(Icons.receipt_long_rounded, color: Theme.of(context).primaryColor),
               label: 'My Requests',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.chat_bubble_outline_rounded),
+              activeIcon: Icon(Icons.chat_bubble_rounded, color: Theme.of(context).primaryColor),
+              label: 'Chats',
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person_rounded),

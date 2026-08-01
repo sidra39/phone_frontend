@@ -446,8 +446,8 @@ class _AddEditPartScreenState extends State<AddEditPartScreen> {
                     TextFormField(
                       controller: _barcodeNumberController,
                       style: const TextStyle(color: Color(0xff212121)),
-                      decoration: _buildInputDecoration('Barcode / QR Number', hint: 'e.g. 194252684892', icon: Icons.qr_code_2_rounded),
-                      validator: (val) => val == null || val.trim().isEmpty ? 'Barcode/QR Number is required' : null,
+                      decoration: _buildInputDecoration('Barcode / QR Number (Optional)', hint: 'e.g. 194252684892 (Leave empty if QR has no printed number)', icon: Icons.qr_code_2_rounded),
+                      validator: null,
                     ),
                     const SizedBox(height: 20),
 

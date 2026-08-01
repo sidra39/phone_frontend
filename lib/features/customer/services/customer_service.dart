@@ -123,4 +123,17 @@ class CustomerService {
     final response = await _apiClient.get('/parts/$partId');
     return response['data'];
   }
+
+  /// Verifies a delivery scan and performs anti-fake / duplicate barcode security checks
+  Future<Map<String, dynamic>> verifyDelivery(String token, int requestId, String scannedBarcode) async {
+    final response = await _apiClient.post(
+      '/customer/verify-delivery',
+      {
+        'request_id': requestId,
+        'scanned_barcode': scannedBarcode,
+      },
+      token: token,
+    );
+    return response;
+  }
 }

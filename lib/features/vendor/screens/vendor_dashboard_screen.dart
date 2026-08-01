@@ -3,6 +3,7 @@ import 'leads_screen.dart';
 import 'my_commissions_screen.dart';
 import 'my_parts_screen.dart';
 import 'vendor_profile_screen.dart';
+import '../../chat/screens/chat_rooms_screen.dart';
 
 /// VendorDashboardScreen
 /// Main vendor shell screen featuring a cyber-sleek glass BottomNavigationBar across My Parts, Leads, Commissions, and Profile.
@@ -20,6 +21,7 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
     MyPartsScreen(),
     LeadsScreen(),
     MyCommissionsScreen(),
+    ChatRoomsScreen(),
     VendorProfileScreen(),
   ];
 
@@ -67,6 +69,11 @@ class _VendorDashboardScreenState extends State<VendorDashboardScreen> {
               icon: const Icon(Icons.payments_rounded),
               activeIcon: Icon(Icons.payments_rounded, color: Theme.of(context).primaryColor),
               label: 'Commissions',
+            ),
+            BottomNavigationBarItem(
+              icon: const Icon(Icons.chat_bubble_outline_rounded),
+              activeIcon: Icon(Icons.chat_bubble_rounded, color: Theme.of(context).primaryColor),
+              label: 'Chats',
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.storefront_rounded),

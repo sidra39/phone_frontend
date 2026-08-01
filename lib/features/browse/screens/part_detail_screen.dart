@@ -7,6 +7,8 @@ import '../../auth/services/auth_provider.dart';
 import '../../customer/models/review_model.dart';
 import '../../customer/services/customer_service.dart';
 import '../services/browse_service.dart';
+import '../../chat/services/chat_service.dart';
+import '../../chat/screens/chat_screen.dart';
 
 /// PartDetailScreen
 /// Displays comprehensive details for a specific phone part, vendor shop information, customer reviews,
@@ -84,6 +86,58 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
             backgroundColor: Colors.orange,
           ),
         );
+      }
+    }
+  }
+
+  void _handleChatAction() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+
+    if (authProvider.token == null || authProvider.currentUser == null) {
+      // Guest User -> Prompt Login/Signup Dialog
+      _showAuthPromptDialog();
+    } else {
+      final role = authProvider.currentUser!.role.toLowerCase();
+      if (role == 'customer') {
+        _startChatSession(authProvider.token!);
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Only customer accounts can chat with vendors'),
+            backgroundColor: Colors.orange,
+          ),
+        );
+      }
+    }
+  }
+
+  Future<void> _startChatSession(String token) async {
+    setState(() => _isRequesting = true);
+    try {
+      final chatService = ChatService();
+      final room = await chatService.createOrGetRoom(token, widget.partId);
+      if (mounted) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChatScreen(
+              roomId: room.id,
+              roomTitle: room.modelName,
+              otherPartyName: room.otherName ?? 'Vendor',
+            ),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        final msg = e.toString().replaceAll('Exception: ', '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isRequesting = false);
       }
     }
   }
@@ -547,18 +601,48 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
         ),
         child: SizedBox(
           height: 50,
-          child: ElevatedButton(
-            onPressed: _isRequesting ? null : _handleRequestAction,
-            child: _isRequesting
-                ? const SizedBox(
-                    height: 22,
-                    width: 22,
-                    child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
-                  )
-                : const Text(
-                    'Request This Part',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          child: Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _isRequesting ? null : _handleChatAction,
+                  icon: const Icon(Icons.chat_bubble_outline_rounded),
+                  label: const Text(
+                    'Chat with Vendor',
+                    style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                   ),
+                  style: OutlinedButton.styleFrom(
+                    side: BorderSide(color: theme.primaryColor, width: 1.5),
+                    foregroundColor: theme.primaryColor,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _isRequesting ? null : _handleRequestAction,
+                  icon: const Icon(Icons.receipt_long_rounded),
+                  label: _isRequesting
+                      ? const SizedBox(
+                          height: 18,
+                          width: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                        )
+                      : const Text(
+                          'Request Part',
+                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                        ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: theme.primaryColor,
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

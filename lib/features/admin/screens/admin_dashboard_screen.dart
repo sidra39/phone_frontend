@@ -10,6 +10,7 @@ import 'dashboard_stats_screen.dart';
 import 'report_review_screen.dart';
 import 'user_management_screen.dart';
 import 'vendor_management_screen.dart';
+import '../../chat/screens/chat_rooms_screen.dart';
 
 /// AdminDashboardScreen
 /// Shell for administrative control featuring a Drawer navigation menu across all 6 sections.
@@ -30,6 +31,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     'Category Management',
     'Commission Review',
     'Reports & Complaints',
+    'Communication Oversight',
   ];
 
 
@@ -121,6 +123,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       const CategoryManagementScreen(),
       const CommissionReviewScreen(),
       const ReportReviewScreen(),
+      const ChatRoomsScreen(),
     ];
 
     return Scaffold(
@@ -271,6 +274,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     icon: Icons.shield_outlined,
                     title: 'Reports & Complaints',
                     index: 5,
+                    accentColor: const Color(0xff757575),
+                  ),
+                  _buildDrawerItem(
+                    icon: Icons.forum_rounded,
+                    title: 'Chat Monitor',
+                    index: 6,
                     accentColor: const Color(0xff757575),
                   ),
                 ],

@@ -1,0 +1,8 @@
+# This file tracks properties of this Flutter project.
+# Used by Flutter tooling to package and debug the app.
+
+version:
+  revision: ""
+  channel: unknown
+
+project_type: app

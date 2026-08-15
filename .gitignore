@@ -1,0 +1,27 @@
+# Flutter/Dart/Pub related
+.packages
+.pub-cache/
+.pub/
+
+# Android
+android/.gradle/
+android/local.properties
+android/*.iml
+android/.idea/
+
+# iOS/macOS
+ios/Pods/
+ios/.symlinks/
+macos/Pods/
+
+# Flutter generated files
+.dart_tool/
+build/
+
+# IDE files
+.idea/
+.vscode/
+*.iml
+
+# Misc
+.DS_Store

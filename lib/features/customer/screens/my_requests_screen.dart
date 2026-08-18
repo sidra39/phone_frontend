@@ -8,6 +8,8 @@ import '../services/customer_service.dart';
 import 'add_review_screen.dart';
 import 'qr_scanner_screen.dart';
 
+import 'customer_dashboard_screen.dart';
+
 /// MyRequestsScreen
 /// Displays customer request history with glowing status badges and review/report actions.
 class MyRequestsScreen extends StatefulWidget {
@@ -74,6 +76,21 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
         elevation: 0,
         title: const Text('My Component Requests', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.explore_rounded, color: Color(0xff00E5FF)),
+            tooltip: 'Browse Marketplace Page',
+            onPressed: () {
+              final dashboard = CustomerDashboardScreen.of(context);
+              if (dashboard != null) {
+                dashboard.setTab(0);
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CustomerDashboardScreen(initialIndex: 0)),
+                );
+              }
+            },
+          ),
           const NotificationBellIcon(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),
@@ -145,17 +162,61 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                 ),
                               ],
                             ),
-                            const SizedBox(height: 8),
-                            Text(
-                              'Shop: ${req.shopName} (${req.vendorCity})',
-                              style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontWeight: FontWeight.w500, fontSize: 13),
-                            ),
-                            if (req.vendorAddress.isNotEmpty)
-                              Text(
-                                req.vendorAddress,
-                                style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
-                              ),
-                            const SizedBox(height: 10),
+                             const SizedBox(height: 8),
+                             Row(
+                               children: [
+                                 Container(
+                                   padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
+                                   decoration: BoxDecoration(
+                                     color: req.deliveryType == 'home_delivery'
+                                         ? Colors.blue.withValues(alpha: 0.15)
+                                         : Colors.purple.withValues(alpha: 0.15),
+                                     borderRadius: BorderRadius.circular(6),
+                                   ),
+                                   child: Text(
+                                     req.deliveryType == 'home_delivery' ? '🚚 Home Delivery' : '🏪 Shop Pickup',
+                                     style: TextStyle(
+                                       fontSize: 10,
+                                       fontWeight: FontWeight.bold,
+                                       color: req.deliveryType == 'home_delivery' ? Colors.blue.shade800 : Colors.purple.shade800,
+                                     ),
+                                   ),
+                                 ),
+                               ],
+                             ),
+                             const SizedBox(height: 6),
+                             Text(
+                               'Shop: ${req.shopName} (${req.vendorCity})',
+                               style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontWeight: FontWeight.w500, fontSize: 13),
+                             ),
+                             if (req.vendorAddress.isNotEmpty)
+                               Text(
+                                 req.vendorAddress,
+                                 style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
+                               ),
+                             if (req.deliveryType == 'home_delivery' && req.deliveryAddress != null) ...[
+                               const SizedBox(height: 4),
+                               Text(
+                                 'Deliver To: ${req.deliveryAddress}, ${req.deliveryCity ?? ''} (Phone: ${req.deliveryPhone ?? 'N/A'})',
+                                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12, color: Colors.blueAccent),
+                               ),
+                             ],
+                             if (req.status == 'cancelled' && req.cancellationReason != null) ...[
+                               const SizedBox(height: 6),
+                               Container(
+                                 padding: const EdgeInsets.all(8),
+                                 decoration: BoxDecoration(
+                                   color: Colors.red.withValues(alpha: 0.1),
+                                   borderRadius: BorderRadius.circular(8),
+                                   border: Border.all(color: Colors.red.shade300),
+                                 ),
+                                 child: Text(
+                                   '❌ Cancelled by ${req.cancelledBy ?? 'Vendor'}: ${req.cancellationReason}',
+                                   style: const TextStyle(color: Colors.red, fontSize: 12, fontWeight: FontWeight.bold),
+                                 ),
+                               ),
+                             ],
+                             const SizedBox(height: 10),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [

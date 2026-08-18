@@ -67,6 +67,11 @@ class AdminService {
     await _apiClient.put('/admin/vendors/$vendorId/reject', {}, token: token);
   }
 
+  /// Verifies a vendor's security deposit receipt
+  Future<void> verifyVendorDeposit(String token, int vendorId) async {
+    await _apiClient.put('/admin/vendors/$vendorId/verify-deposit', {}, token: token);
+  }
+
   /// Fetches user list with optional role filter
   Future<List<UserAdminModel>> getAllUsers(String token, {String? roleFilter}) async {
     String endpoint = '/admin/users';
@@ -166,5 +171,16 @@ class AdminService {
 
   Future<void> deletePartType(String token, int id) async {
     await _apiClient.delete('/categories/part-types/$id', token: token);
+  }
+
+  /// Fetches system settings (Security Deposit Amount, Phone, Commission Rate %)
+  Future<Map<String, dynamic>> getSystemSettings(String token) async {
+    final response = await _apiClient.get('/admin/settings', token: token);
+    return Map<String, dynamic>.from(response['data'] ?? {});
+  }
+
+  /// Updates system settings (Security Deposit Amount, Phone, Commission Rate %)
+  Future<void> updateSystemSettings(String token, Map<String, dynamic> settings) async {
+    await _apiClient.put('/admin/settings', settings, token: token);
   }
 }

@@ -209,9 +209,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
     String serverMsg = '';
     int? prevRequestId;
 
-    if (token != null && widget.requestId != null) {
+    if (token != null) {
       try {
-        final res = await _customerService.verifyDelivery(token, widget.requestId!, scannedValue);
+        final res = await _customerService.verifyDelivery(token, widget.partId, widget.requestId, scannedValue);
         isMatch = res['is_match'] == true;
         isDuplicateReuse = res['is_duplicate_reuse'] == true;
         serverMsg = res['message'] ?? '';
@@ -383,7 +383,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
   }) {
     final theme = Theme.of(context);
     final int? vendorUserId = _partData?['vendor_user_id'];
-    final bool isExpectedEmpty = expectedBarcode.isEmpty;
 
     showModalBottomSheet(
       context: context,
@@ -401,42 +400,21 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: (isMatch
-                          ? const Color(0xff00E676)
-                          : isExpectedEmpty
-                              ? Colors.amber
-                              : const Color(0xffFF5252))
-                      .withValues(alpha: 0.15),
+                  color: (isMatch ? const Color(0xff00E676) : const Color(0xffFF5252)).withValues(alpha: 0.15),
                   shape: BoxShape.circle,
                 ),
                 child: Icon(
-                  isMatch
-                      ? Icons.verified_rounded
-                      : isExpectedEmpty
-                          ? Icons.info_outline_rounded
-                          : Icons.warning_amber_rounded,
-                  color: isMatch
-                      ? const Color(0xff00E676)
-                      : isExpectedEmpty
-                          ? Colors.amber
-                          : const Color(0xffFF5252),
+                  isMatch ? Icons.verified_rounded : Icons.warning_amber_rounded,
+                  color: isMatch ? const Color(0xff00E676) : const Color(0xffFF5252),
                   size: 54,
                 ),
               ),
               const SizedBox(height: 16),
               Text(
-                isMatch
-                    ? '✅ Verified — Barcode Matches Listing'
-                    : isExpectedEmpty
-                        ? 'ℹ️ Visual Verification Needed'
-                        : '⚠️ Mismatch — Barcode Does Not Match',
+                isMatch ? '✅ Verified — Product is Authentic!' : '⚠️ MISMATCH DETECTED — CODE DOES NOT MATCH',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: isMatch
-                      ? const Color(0xff00E676)
-                      : isExpectedEmpty
-                          ? Colors.amber
-                          : const Color(0xffFF5252),
+                  color: isMatch ? const Color(0xff00E676) : const Color(0xffFF5252),
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -444,10 +422,8 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
               const SizedBox(height: 12),
               Text(
                 isMatch
-                    ? 'The physically scanned barcode matches the vendor\'s declared product listing.'
-                    : isExpectedEmpty
-                        ? 'No barcode number was declared by the vendor. Please compare the physical package barcode/QR and the reference packaging photo above.'
-                        : 'The scanned barcode/QR ($scannedBarcode) does not match what the vendor declared ($expectedBarcode). If they match visually on the label and photo, you can approve it visually.',
+                    ? 'The physically scanned Barcode/QR matches the vendor\'s declared product code. Verification successful!'
+                    : 'The scanned code does not match what the vendor declared. Verification failed automatically.',
                 textAlign: TextAlign.center,
                 style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 13),
               ),
@@ -464,27 +440,43 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                 child: Column(
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Declared Barcode:', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        Text(
-                          isExpectedEmpty ? 'N/A' : expectedBarcode,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', fontSize: 13),
+                        const SizedBox(
+                          width: 110,
+                          child: Text('Declared Code:', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        ),
+                        Expanded(
+                          child: Text(
+                            expectedBarcode.isEmpty ? 'N/A' : expectedBarcode,
+                            textAlign: TextAlign.end,
+                            style: const TextStyle(fontWeight: FontWeight.bold, fontFamily: 'monospace', fontSize: 12),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
+                          ),
                         ),
                       ],
                     ),
                     const Divider(height: 16, color: Color(0xffCCCCCC)),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text('Scanned Barcode:', style: TextStyle(fontSize: 12, color: Colors.grey)),
-                        Text(
-                          scannedBarcode,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontFamily: 'monospace',
-                            fontSize: 13,
-                            color: isMatch ? const Color(0xff00E676) : const Color(0xffFF5252),
+                        const SizedBox(
+                          width: 110,
+                          child: Text('Scanned Code:', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                        ),
+                        Expanded(
+                          child: Text(
+                            scannedBarcode,
+                            textAlign: TextAlign.end,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontFamily: 'monospace',
+                              fontSize: 12,
+                              color: isMatch ? const Color(0xff00E676) : const Color(0xffFF5252),
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 3,
                           ),
                         ),
                       ],
@@ -516,78 +508,48 @@ class _QrScannerScreenState extends State<QrScannerScreen> {
                   ),
                 ),
               ] else ...[
-                Column(
+                Row(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton.icon(
+                    Expanded(
+                      child: OutlinedButton(
                         onPressed: () {
-                          final messenger = ScaffoldMessenger.of(context);
-                          Navigator.pop(ctx, true);
-                          Navigator.pop(context);
-                          messenger.showSnackBar(
-                            const SnackBar(content: Text('Delivery verified successfully via visual check!'), backgroundColor: Colors.green),
-                          );
+                          Navigator.pop(ctx, false);
                         },
-                        icon: const Icon(Icons.check_circle_rounded, size: 18),
-                        label: const Text('Approve (Visual Match)', style: TextStyle(fontWeight: FontWeight.bold)),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: theme.primaryColor,
-                          foregroundColor: Colors.white,
+                        style: OutlinedButton.styleFrom(
+                          side: const BorderSide(color: Color(0xffCCCCCC)),
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                           padding: const EdgeInsets.symmetric(vertical: 14),
                         ),
+                        child: const Text('Scan Again', style: TextStyle(color: Color(0xff212121))),
                       ),
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: OutlinedButton(
-                            onPressed: () {
-                              Navigator.pop(ctx, false);
-                            },
-                            style: OutlinedButton.styleFrom(
-                              side: const BorderSide(color: Color(0xffCCCCCC)),
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                              padding: const EdgeInsets.symmetric(vertical: 14),
-                            ),
-                            child: const Text('Scan Again', style: TextStyle(color: Color(0xff212121))),
+                    if (vendorUserId != null) ...[
+                      const SizedBox(width: 12),
+                      Expanded(
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.pop(ctx, true);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => SubmitReportScreen(
+                                  reportedUserId: vendorUserId,
+                                  requestId: widget.requestId,
+                                ),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.report_problem_rounded, size: 16),
+                          label: const Text('Report Vendor', style: TextStyle(fontWeight: FontWeight.bold)),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xffFF5252),
+                            foregroundColor: Colors.white,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            padding: const EdgeInsets.symmetric(vertical: 14),
                           ),
                         ),
-                        if (vendorUserId != null) ...[
-                          const SizedBox(width: 12),
-                          Expanded(
-                            child: ElevatedButton.icon(
-                              onPressed: () {
-                                Navigator.pop(ctx, true);
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => SubmitReportScreen(
-                                      reportedUserId: vendorUserId,
-                                      requestId: widget.requestId,
-                                    ),
-                                  ),
-                                ).then((_) {
-                                  if (mounted) {
-                                    _startScanner();
-                                  }
-                                });
-                              },
-                              icon: const Icon(Icons.report_problem_rounded, size: 16),
-                              label: const Text('Report Vendor'),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xffFF5252),
-                                foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                padding: const EdgeInsets.symmetric(vertical: 14),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ],
-                    ),
+                      ),
+                    ],
                   ],
                 ),
               ],

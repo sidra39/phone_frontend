@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/notification_bell_icon.dart';
+import '../../notifications/services/notification_provider.dart';
 import '../../auth/services/auth_provider.dart';
 import '../models/commission_model.dart';
 import '../services/vendor_service.dart';
@@ -34,6 +35,11 @@ class _MyCommissionsScreenState extends State<MyCommissionsScreen> {
 
     try {
       final list = await _vendorService.getMyCommissions(token);
+      if (mounted) {
+        try {
+          Provider.of<NotificationProvider>(context, listen: false).markAllRead(token);
+        } catch (_) {}
+      }
       setState(() {
         _commissions = list;
         _isLoading = false;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_provider.dart';
+import 'email_otp_verification_screen.dart';
 
 /// RegisterVendorScreen
 /// Form screen for creating a new Vendor account.
@@ -48,9 +49,10 @@ class _RegisterVendorScreenState extends State<RegisterVendorScreen> {
     final double? longitude = double.tryParse(_longitudeController.text.trim());
 
     try {
+      final registeredEmail = _emailController.text.trim();
       await authProvider.registerVendor(
         name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
+        email: registeredEmail,
         password: _passwordController.text,
         phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
         shopName: _shopNameController.text.trim(),
@@ -64,11 +66,16 @@ class _RegisterVendorScreenState extends State<RegisterVendorScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Registration submitted, pending admin approval'),
-            backgroundColor: Colors.orange,
+            content: Text('Vendor registered! Verification OTP sent to your email.'),
+            backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => EmailOtpVerificationScreen(email: registeredEmail),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {

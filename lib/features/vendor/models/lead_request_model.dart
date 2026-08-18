@@ -12,6 +12,14 @@ class LeadRequestModel {
   final String? customerCity;
   final String partModelName;
   final double partPrice;
+  final String deliveryType;
+  final String? deliveryAddress;
+  final String? deliveryCity;
+  final String? deliveryPhone;
+  final String? deliveryNotes;
+  final String? cancellationReason;
+  final String? cancelledBy;
+  final String? cancelledAt;
 
   LeadRequestModel({
     required this.id,
@@ -25,6 +33,14 @@ class LeadRequestModel {
     this.customerCity,
     required this.partModelName,
     required this.partPrice,
+    this.deliveryType = 'shop_pickup',
+    this.deliveryAddress,
+    this.deliveryCity,
+    this.deliveryPhone,
+    this.deliveryNotes,
+    this.cancellationReason,
+    this.cancelledBy,
+    this.cancelledAt,
   });
 
   factory LeadRequestModel.fromJson(Map<String, dynamic> json) {
@@ -42,6 +58,14 @@ class LeadRequestModel {
       customerCity: json['customer_city'],
       partModelName: json['model_name'] ?? 'Part #${json['part_id']}',
       partPrice: json['price'] != null ? double.parse(json['price'].toString()) : 0.0,
+      deliveryType: json['delivery_type'] ?? 'shop_pickup',
+      deliveryAddress: json['delivery_address'],
+      deliveryCity: json['delivery_city'],
+      deliveryPhone: json['delivery_phone'],
+      deliveryNotes: json['delivery_notes'],
+      cancellationReason: json['cancellation_reason'],
+      cancelledBy: json['cancelled_by'],
+      cancelledAt: json['cancelled_at'],
     );
   }
 }

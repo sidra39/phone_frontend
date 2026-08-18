@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../core/constants/api_constants.dart';
 import '../../auth/services/auth_provider.dart';
 import '../models/vendor_admin_model.dart';
 import '../services/admin_service.dart';
@@ -146,6 +147,137 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
     }
   }
 
+  Future<void> _handleVerifyDeposit(VendorAdminModel vendor) async {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    if (token == null) return;
+
+    try {
+      await _adminService.verifyVendorDeposit(token, vendor.id);
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('✅ Security deposit for "${vendor.shopName}" marked as PAID & verified!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+        _loadVendors();
+      }
+    } catch (e) {
+      if (mounted) {
+        final msg = e.toString().replaceAll('Exception: ', '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg), backgroundColor: Colors.red),
+        );
+      }
+    }
+  }
+
+  void _showDepositReceiptViewer(VendorAdminModel vendor) {
+    if (vendor.securityDepositProof == null || vendor.securityDepositProof!.isEmpty) return;
+
+    String proofUrl = vendor.securityDepositProof!;
+    if (proofUrl.startsWith('/')) {
+      proofUrl = '${ApiConstants.baseUrl}$proofUrl';
+    }
+
+    showDialog(
+      context: context,
+      builder: (ctx) => Dialog(
+        backgroundColor: Theme.of(context).cardColor,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          '${vendor.shopName} - Security Deposit Receipt',
+                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        ),
+                        const SizedBox(height: 2),
+                        Text(
+                          'Owner: ${vendor.ownerName} (${vendor.phone ?? vendor.email})',
+                          style: const TextStyle(fontSize: 12, color: Colors.grey),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.close_rounded),
+                    onPressed: () => Navigator.pop(ctx),
+                  ),
+                ],
+              ),
+            ),
+            Flexible(
+              child: Container(
+                constraints: const BoxConstraints(maxHeight: 450),
+                width: double.infinity,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image.network(
+                    proofUrl,
+                    fit: BoxFit.contain,
+                    errorBuilder: (context, error, stackTrace) => Container(
+                      padding: const EdgeInsets.all(24),
+                      color: Colors.red.withValues(alpha: 0.1),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const Icon(Icons.broken_image_rounded, color: Colors.red, size: 48),
+                          const SizedBox(height: 8),
+                          Text('Unable to load receipt photo: $error', textAlign: TextAlign.center, style: const TextStyle(fontSize: 12, color: Colors.red)),
+                          const SizedBox(height: 8),
+                          SelectableText(proofUrl, style: const TextStyle(fontSize: 11, color: Colors.grey)),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  if (vendor.securityDepositStatus?.toLowerCase() != 'paid')
+                    Expanded(
+                      child: ElevatedButton.icon(
+                        onPressed: () {
+                          Navigator.pop(ctx);
+                          _handleVerifyDeposit(vendor);
+                        },
+                        icon: const Icon(Icons.check_circle_rounded),
+                        label: const Text('Approve & Verify Security Deposit', style: TextStyle(fontWeight: FontWeight.bold)),
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                        ),
+                      ),
+                    ),
+                  if (vendor.securityDepositStatus?.toLowerCase() != 'paid') const SizedBox(width: 8),
+                  OutlinedButton(
+                    onPressed: () => Navigator.pop(ctx),
+                    child: const Text('Close'),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Color _getStatusColor(String status) {
     switch (status.toLowerCase()) {
       case 'approved':
@@ -155,6 +287,18 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
       case 'pending':
       default:
         return const Color(0xffD97706);
+    }
+  }
+
+  Color _getDepositColor(String? status) {
+    switch ((status ?? '').toLowerCase()) {
+      case 'paid':
+        return const Color(0xff16A34A);
+      case 'pending_verification':
+        return const Color(0xffD97706);
+      case 'unpaid':
+      default:
+        return const Color(0xffDC2626);
     }
   }
 
@@ -346,6 +490,86 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
                                       ],
                                     ),
                                   ],
+
+                                  // Security Deposit Status & Receipt Preview Box
+                                  Container(
+                                    margin: const EdgeInsets.only(top: 12),
+                                    padding: const EdgeInsets.all(12),
+                                    decoration: BoxDecoration(
+                                      color: theme.scaffoldBackgroundColor,
+                                      borderRadius: BorderRadius.circular(12),
+                                      border: Border.all(color: const Color(0xffCCCCCC)),
+                                    ),
+                                    child: Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            const Row(
+                                              children: [
+                                                Icon(Icons.shield_outlined, size: 18, color: Colors.amber),
+                                                SizedBox(width: 6),
+                                                Text('Security Deposit:', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                              ],
+                                            ),
+                                            Container(
+                                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                              decoration: BoxDecoration(
+                                                color: _getDepositColor(vendor.securityDepositStatus).withValues(alpha: 0.2),
+                                                borderRadius: BorderRadius.circular(10),
+                                                border: Border.all(color: _getDepositColor(vendor.securityDepositStatus)),
+                                              ),
+                                              child: Text(
+                                                (vendor.securityDepositStatus ?? 'UNPAID').replaceAll('_', ' ').toUpperCase(),
+                                                style: TextStyle(
+                                                  color: _getDepositColor(vendor.securityDepositStatus),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        if (vendor.securityDepositProof != null && vendor.securityDepositProof!.isNotEmpty) ...[
+                                          const SizedBox(height: 10),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton.icon(
+                                              onPressed: () => _showDepositReceiptViewer(vendor),
+                                              icon: const Icon(Icons.image_outlined, size: 18),
+                                              label: const Text('📷 View Security Deposit Receipt Photo', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: const Color(0xff00E5FF),
+                                                foregroundColor: Colors.black,
+                                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                        if (vendor.securityDepositStatus?.toLowerCase() != 'paid' &&
+                                            vendor.securityDepositProof != null &&
+                                            vendor.securityDepositProof!.isNotEmpty) ...[
+                                          const SizedBox(height: 8),
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: ElevatedButton.icon(
+                                              onPressed: () => _handleVerifyDeposit(vendor),
+                                              icon: const Icon(Icons.check_circle_outline, size: 18),
+                                              label: const Text('Approve & Verify Security Deposit', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12)),
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor: Colors.green,
+                                                foregroundColor: Colors.white,
+                                                padding: const EdgeInsets.symmetric(vertical: 10),
+                                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ],
+                                    ),
+                                  ),
 
                                   if (isPending) ...[
                                     const SizedBox(height: 16),

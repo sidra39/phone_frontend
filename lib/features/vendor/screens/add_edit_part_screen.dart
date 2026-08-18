@@ -27,6 +27,7 @@ class _AddEditPartScreenState extends State<AddEditPartScreen> {
   int? _selectedBrandId;
   int? _selectedPartTypeId;
   String _selectedCondition = 'new';
+  String _selectedCodeType = 'qr';
 
   final _modelNameController = TextEditingController();
   final _priceController = TextEditingController();
@@ -162,6 +163,7 @@ class _AddEditPartScreenState extends State<AddEditPartScreen> {
       'condition_type': _selectedCondition,
       'stock_quantity': _stockQuantityController.text.trim(),
       'barcode_number': _barcodeNumberController.text.trim(),
+      'code_type': _selectedCodeType,
     };
 
     // Prepare files
@@ -442,12 +444,39 @@ class _AddEditPartScreenState extends State<AddEditPartScreen> {
                     ),
                     const SizedBox(height: 16),
 
+                    // Identification Type Dropdown (Barcode vs QR Code)
+                    DropdownButtonFormField<String>(
+                      initialValue: _selectedCodeType,
+                      dropdownColor: Theme.of(context).cardColor,
+                      style: const TextStyle(color: Color(0xff212121)),
+                      decoration: _buildInputDecoration('Identification Type', icon: Icons.qr_code_scanner_rounded),
+                      items: const [
+                        DropdownMenuItem(value: 'qr', child: Text('QR Code (Auto-generated if no number entered)')),
+                        DropdownMenuItem(value: 'barcode', child: Text('Barcode (Number required)')),
+                      ],
+                      onChanged: (val) {
+                        if (val != null) setState(() => _selectedCodeType = val);
+                      },
+                    ),
+                    const SizedBox(height: 16),
+
                     // Barcode / QR text field
                     TextFormField(
                       controller: _barcodeNumberController,
                       style: const TextStyle(color: Color(0xff212121)),
-                      decoration: _buildInputDecoration('Barcode / QR Number (Optional)', hint: 'e.g. 194252684892 (Leave empty if QR has no printed number)', icon: Icons.qr_code_2_rounded),
-                      validator: null,
+                      decoration: _buildInputDecoration(
+                        _selectedCodeType == 'barcode' ? 'Barcode Number *' : 'QR Serial / Code Number (Optional)',
+                        hint: _selectedCodeType == 'barcode'
+                            ? 'Enter printed barcode serial number'
+                            : 'Optional: System auto-generates unique QR token if left empty',
+                        icon: Icons.qr_code_2_rounded,
+                      ),
+                      validator: (val) {
+                        if (_selectedCodeType == 'barcode' && (val == null || val.trim().isEmpty)) {
+                          return 'Barcode Number is required for barcode products';
+                        }
+                        return null;
+                      },
                     ),
                     const SizedBox(height: 20),
 

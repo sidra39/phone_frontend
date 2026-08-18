@@ -7,6 +7,8 @@ import '../models/part_model.dart';
 import '../services/vendor_service.dart';
 import 'add_edit_part_screen.dart';
 
+import 'vendor_dashboard_screen.dart';
+
 /// MyPartsScreen
 /// Displays vendor inventory list with cyber-glassmorphic cards, price tags, QR actions, and stock badges.
 class MyPartsScreen extends StatefulWidget {
@@ -105,6 +107,21 @@ class _MyPartsScreenState extends State<MyPartsScreen> {
         elevation: 0,
         title: const Text('Parts Inventory', style: TextStyle(fontWeight: FontWeight.bold)),
         actions: [
+          IconButton(
+            icon: const Icon(Icons.explore_rounded, color: Color(0xff00E5FF)),
+            tooltip: 'Browse Marketplace Page',
+            onPressed: () {
+              final dashboard = VendorDashboardScreen.of(context);
+              if (dashboard != null) {
+                dashboard.setTab(0);
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const VendorDashboardScreen(initialIndex: 0)),
+                );
+              }
+            },
+          ),
           const NotificationBellIcon(),
           IconButton(
             icon: const Icon(Icons.refresh_rounded),

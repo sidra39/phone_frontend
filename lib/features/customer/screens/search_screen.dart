@@ -6,6 +6,8 @@ import '../../vendor/models/category_model.dart';
 import '../models/search_result_model.dart';
 import '../services/customer_service.dart';
 
+import 'customer_dashboard_screen.dart';
+
 /// SearchScreen
 /// Allows customers to search for parts by brand, part type, model, and city,
 /// featuring cyber-glassmorphism cards, fallback alert banners, and direct request submission.
@@ -166,8 +168,23 @@ class _SearchScreenState extends State<SearchScreen> {
         backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
         title: const Text('Search Phone Parts', style: TextStyle(fontWeight: FontWeight.bold)),
-        actions: const [
-          NotificationBellIcon(),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.explore_rounded, color: Color(0xff00E5FF)),
+            tooltip: 'Browse Marketplace Page',
+            onPressed: () {
+              final dashboard = CustomerDashboardScreen.of(context);
+              if (dashboard != null) {
+                dashboard.setTab(0);
+              } else {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const CustomerDashboardScreen(initialIndex: 0)),
+                );
+              }
+            },
+          ),
+          const NotificationBellIcon(),
         ],
       ),
       body: _isLoadingOptions

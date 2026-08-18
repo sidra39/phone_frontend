@@ -17,6 +17,14 @@ class RequestModel {
   final String vendorAddress;
   final String? brandName;
   final String? partTypeName;
+  final String deliveryType;
+  final String? deliveryAddress;
+  final String? deliveryCity;
+  final String? deliveryPhone;
+  final String? deliveryNotes;
+  final String? cancellationReason;
+  final String? cancelledBy;
+  final String? cancelledAt;
 
   RequestModel({
     required this.id,
@@ -35,6 +43,14 @@ class RequestModel {
     required this.vendorAddress,
     this.brandName,
     this.partTypeName,
+    this.deliveryType = 'shop_pickup',
+    this.deliveryAddress,
+    this.deliveryCity,
+    this.deliveryPhone,
+    this.deliveryNotes,
+    this.cancellationReason,
+    this.cancelledBy,
+    this.cancelledAt,
   });
 
   factory RequestModel.fromJson(Map<String, dynamic> json) {
@@ -59,6 +75,14 @@ class RequestModel {
       vendorAddress: json['vendor_address'] ?? '',
       brandName: json['brand_name'],
       partTypeName: json['part_type_name'],
+      deliveryType: json['delivery_type'] ?? 'shop_pickup',
+      deliveryAddress: json['delivery_address'],
+      deliveryCity: json['delivery_city'],
+      deliveryPhone: json['delivery_phone'],
+      deliveryNotes: json['delivery_notes'],
+      cancellationReason: json['cancellation_reason'],
+      cancelledBy: json['cancelled_by'],
+      cancelledAt: json['cancelled_at'],
     );
   }
 }

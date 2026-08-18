@@ -80,14 +80,76 @@ class VendorService {
     await _apiClient.put('/vendor/requests/$requestId/respond', {'status': status}, token: token);
   }
 
-  /// Submits payment proof URL for a commission
-  Future<CommissionModel> uploadCommissionProof(String token, int commissionId, String proofUrl) async {
-    final response = await _apiClient.post(
-      '/vendor/commissions/$commissionId/proof',
-      {'payment_proof_url': proofUrl},
+  /// Cancels an order online, incrementing vendor cancellation counter and notifying Admin & Customer
+  Future<Map<String, dynamic>> cancelOrder(String token, int requestId, String reason) async {
+    final response = await _apiClient.put(
+      '/vendor/requests/$requestId/cancel',
+      {'reason': reason},
       token: token,
     );
-    return CommissionModel.fromJson(response['data']);
+    return response;
+  }
+
+  /// Submits payment proof image file or URL for a commission
+  Future<CommissionModel> uploadCommissionProof(
+    String token,
+    int commissionId, {
+    List<int>? bytes,
+    String? filename,
+    String? proofPath,
+    String? proofUrl,
+  }) async {
+    if ((bytes != null && bytes.isNotEmpty) || (proofPath != null && proofPath.isNotEmpty)) {
+      final Map<String, dynamic> fileMap = {};
+      if (bytes != null) fileMap['bytes'] = bytes;
+      if (filename != null) fileMap['filename'] = filename;
+      if (proofPath != null) fileMap['path'] = proofPath;
+
+      final response = await _apiClient.postMultipart(
+        '/vendor/commissions/$commissionId/proof',
+        {},
+        {'receiptImage': fileMap},
+        token: token,
+      );
+      return CommissionModel.fromJson(response['data']);
+    } else {
+      final response = await _apiClient.post(
+        '/vendor/commissions/$commissionId/proof',
+        {'payment_proof_url': proofUrl ?? ''},
+        token: token,
+      );
+      return CommissionModel.fromJson(response['data']);
+    }
+  }
+
+  /// Submits vendor security deposit receipt photo file or URL
+  Future<void> submitSecurityDepositProof(
+    String token, {
+    List<int>? depositProofBytes,
+    String? filename,
+    String? depositProofPath,
+    String? depositProofUrl,
+  }) async {
+    if ((depositProofBytes != null && depositProofBytes.isNotEmpty) ||
+        (depositProofPath != null && depositProofPath.isNotEmpty)) {
+      final Map<String, dynamic> fileMap = {};
+      if (depositProofBytes != null) fileMap['bytes'] = depositProofBytes;
+      if (filename != null) fileMap['filename'] = filename;
+      if (depositProofPath != null) fileMap['path'] = depositProofPath;
+
+      await _apiClient.postMultipart(
+        '/vendor/security-deposit',
+        {},
+        {'receiptImage': fileMap},
+        token: token,
+      );
+    } else {
+      await _apiClient.post(
+        '/vendor/security-deposit',
+        {'deposit_proof_url': depositProofUrl ?? ''},
+        token: token,
+      );
+    }
   }
 
   /// Fetches commissions belonging to logged-in vendor

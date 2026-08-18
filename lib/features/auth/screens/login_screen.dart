@@ -9,6 +9,7 @@ import '../../vendor/screens/vendor_dashboard_screen.dart';
 import '../../browse/screens/part_detail_screen.dart';
 import 'register_customer_screen.dart';
 import 'register_vendor_screen.dart';
+import 'email_otp_verification_screen.dart';
 
 /// LoginScreen
 /// Entry point for authenticating users featuring official PPF branding logo.
@@ -99,12 +100,45 @@ class _LoginScreenState extends State<LoginScreen> {
     } catch (e) {
       if (mounted) {
         final errorMessage = e.toString().replaceAll('Exception: ', '');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errorMessage),
-            backgroundColor: Colors.red,
-          ),
-        );
+        final String inputEmail = _emailController.text.trim();
+        if (errorMessage.toLowerCase().contains('not verified')) {
+          showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              title: const Text('🔑 Email Verification Required', style: TextStyle(fontWeight: FontWeight.bold)),
+              content: Text(errorMessage),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.pop(ctx);
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EmailOtpVerificationScreen(
+                          email: inputEmail,
+                          returnToPartId: widget.returnToPartId,
+                        ),
+                      ),
+                    );
+                  },
+                  child: const Text('Enter OTP Code'),
+                ),
+              ],
+            ),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(errorMessage),
+              backgroundColor: Colors.red,
+            ),
+          );
+        }
       }
     }
   }

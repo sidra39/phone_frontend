@@ -2,26 +2,47 @@ import 'package:flutter/material.dart';
 import 'customer_profile_screen.dart';
 import 'my_requests_screen.dart';
 import 'search_screen.dart';
+import '../../browse/screens/browse_home_screen.dart';
 import '../../chat/screens/chat_rooms_screen.dart';
 
 /// CustomerDashboardScreen
-/// Main customer shell managing bottom navigation tabs: Search, My Requests, and Profile.
+/// Main customer shell managing permanent bottom navigation tabs: Browse, Search, My Requests, Chats, and Profile.
 class CustomerDashboardScreen extends StatefulWidget {
-  const CustomerDashboardScreen({super.key});
+  final int initialIndex;
+  const CustomerDashboardScreen({super.key, this.initialIndex = 0});
+
+  static CustomerDashboardScreenState? of(BuildContext context) {
+    return context.findAncestorStateOfType<CustomerDashboardScreenState>();
+  }
 
   @override
-  State<CustomerDashboardScreen> createState() => _CustomerDashboardScreenState();
+  State<CustomerDashboardScreen> createState() => CustomerDashboardScreenState();
 }
 
-class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
-  int _currentIndex = 0;
+class CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
+  late int _currentIndex;
 
   final List<Widget> _screens = const [
+    BrowseHomeScreen(),
     SearchScreen(),
     MyRequestsScreen(),
     ChatRoomsScreen(),
     CustomerProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _currentIndex = widget.initialIndex;
+  }
+
+  void setTab(int index) {
+    if (index >= 0 && index < _screens.length) {
+      setState(() {
+        _currentIndex = index;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +55,8 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
           color: Theme.of(context).cardColor,
-          border: Border(
-            top: BorderSide(color: const Color(0xffCCCCCC), width: 1),
+          border: const Border(
+            top: BorderSide(color: Color(0xffCCCCCC), width: 1),
           ),
         ),
         child: BottomNavigationBar(
@@ -49,19 +70,24 @@ class _CustomerDashboardScreenState extends State<CustomerDashboardScreen> {
           elevation: 0,
           selectedItemColor: Theme.of(context).primaryColor,
           unselectedItemColor: Colors.grey.shade600,
-          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-          unselectedLabelStyle: const TextStyle(fontSize: 11),
+          selectedLabelStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 11),
+          unselectedLabelStyle: const TextStyle(fontSize: 10),
           type: BottomNavigationBarType.fixed,
           items: [
             BottomNavigationBarItem(
+              icon: const Icon(Icons.explore_outlined),
+              activeIcon: Icon(Icons.explore_rounded, color: Theme.of(context).primaryColor),
+              label: 'Browse',
+            ),
+            BottomNavigationBarItem(
               icon: const Icon(Icons.search_rounded),
               activeIcon: Icon(Icons.search_rounded, color: Theme.of(context).primaryColor),
-              label: 'Search Parts',
+              label: 'Search',
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.receipt_long_rounded),
               activeIcon: Icon(Icons.receipt_long_rounded, color: Theme.of(context).primaryColor),
-              label: 'My Requests',
+              label: 'Requests',
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.chat_bubble_outline_rounded),

@@ -63,11 +63,26 @@ class CustomerService {
     );
   }
 
-  /// Sends a part request to a vendor
-  Future<RequestModel> createRequest(String token, int partId) async {
+  /// Sends a part request to a vendor with optional Home Delivery options
+  Future<RequestModel> createRequest(
+    String token,
+    int partId, {
+    String deliveryType = 'shop_pickup',
+    String? deliveryAddress,
+    String? deliveryCity,
+    String? deliveryPhone,
+    String? deliveryNotes,
+  }) async {
     final response = await _apiClient.post(
       '/customer/requests',
-      {'part_id': partId},
+      {
+        'part_id': partId,
+        'delivery_type': deliveryType,
+        'delivery_address': deliveryAddress,
+        'delivery_city': deliveryCity,
+        'delivery_phone': deliveryPhone,
+        'delivery_notes': deliveryNotes,
+      },
       token: token,
     );
     return RequestModel.fromJson(response['data']);
@@ -125,10 +140,11 @@ class CustomerService {
   }
 
   /// Verifies a delivery scan and performs anti-fake / duplicate barcode security checks
-  Future<Map<String, dynamic>> verifyDelivery(String token, int requestId, String scannedBarcode) async {
+  Future<Map<String, dynamic>> verifyDelivery(String token, int partId, int? requestId, String scannedBarcode) async {
     final response = await _apiClient.post(
       '/customer/verify-delivery',
       {
+        'part_id': partId,
         'request_id': requestId,
         'scanned_barcode': scannedBarcode,
       },

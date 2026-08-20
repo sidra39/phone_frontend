@@ -70,4 +70,25 @@ class AuthService {
       'longitude': longitude,
     });
   }
+
+  /// Requests a 6-digit OTP code to be sent via email
+  Future<dynamic> sendOtp(String email) async {
+    return await _apiClient.post('/auth/send-otp', {'email': email});
+  }
+
+  /// Verifies a 6-digit OTP code submitted by the user
+  Future<dynamic> verifyOtp(String email, String otp) async {
+    return await _apiClient.post('/auth/verify-otp', {
+      'email': email,
+      'otp': otp,
+    });
+  }
+
+  /// Fetches latest user profile from server
+  Future<UserModel> getProfile(String token, String role) async {
+    final endpoint = role == 'vendor' ? '/vendor/profile' : '/customer/profile';
+    final res = await _apiClient.get(endpoint, token: token);
+    final data = res['data'];
+    return UserModel.fromJson(data);
+  }
 }

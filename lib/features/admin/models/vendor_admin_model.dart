@@ -7,6 +7,9 @@ class VendorAdminModel {
   final String city;
   final String address;
   final String verificationStatus;
+  final String? securityDepositStatus;
+  final String? securityDepositProof;
+  final double? securityDepositAmount;
   final String ownerName;
   final String email;
   final String? phone;
@@ -18,6 +21,9 @@ class VendorAdminModel {
     required this.city,
     required this.address,
     required this.verificationStatus,
+    this.securityDepositStatus,
+    this.securityDepositProof,
+    this.securityDepositAmount,
     required this.ownerName,
     required this.email,
     this.phone,
@@ -31,6 +37,11 @@ class VendorAdminModel {
       city: json['city'] ?? '',
       address: json['address'] ?? '',
       verificationStatus: json['verification_status'] ?? 'pending',
+      securityDepositStatus: json['security_deposit_status'],
+      securityDepositProof: json['security_deposit_proof'],
+      securityDepositAmount: json['security_deposit_amount'] != null
+          ? double.tryParse(json['security_deposit_amount'].toString())
+          : null,
       ownerName: json['owner_name'] ?? '',
       email: json['owner_email'] ?? '',
       phone: json['owner_phone'],

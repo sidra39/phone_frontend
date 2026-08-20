@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import '../constants/api_constants.dart';
 
@@ -129,15 +131,32 @@ class ApiClient {
 
       for (final entry in files.entries) {
         final fileData = entry.value;
-        final List<int> bytes = fileData['bytes'];
-        final String filename = fileData['filename'];
-        request.files.add(
-          http.MultipartFile.fromBytes(
-            entry.key,
-            bytes,
-            filename: filename,
-          ),
-        );
+        List<int>? bytes = fileData['bytes'];
+        String filename = fileData['filename'] ?? 'receipt_${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+        if (bytes == null && fileData['path'] != null) {
+          final String filePath = fileData['path'];
+          if (!kIsWeb) {
+            bytes = await File(filePath).readAsBytes();
+          }
+          if (fileData['filename'] == null) {
+            filename = filePath.split(RegExp(r'[/\\]')).last;
+          }
+        }
+
+        if (!filename.contains('.')) {
+          filename = '$filename.jpg';
+        }
+
+        if (bytes != null) {
+          request.files.add(
+            http.MultipartFile.fromBytes(
+              entry.key,
+              bytes,
+              filename: filename,
+            ),
+          );
+        }
       }
 
       final streamedResponse = await _client.send(request);

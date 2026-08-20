@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../services/auth_provider.dart';
+import 'email_otp_verification_screen.dart';
 
 /// RegisterCustomerScreen
 /// Form screen for creating a new Customer account.
@@ -37,9 +38,10 @@ class _RegisterCustomerScreenState extends State<RegisterCustomerScreen> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
 
     try {
+      final registeredEmail = _emailController.text.trim();
       await authProvider.registerCustomer(
         name: _nameController.text.trim(),
-        email: _emailController.text.trim(),
+        email: registeredEmail,
         password: _passwordController.text,
         phone: _phoneController.text.trim().isEmpty ? null : _phoneController.text.trim(),
         city: _cityController.text.trim(),
@@ -48,11 +50,16 @@ class _RegisterCustomerScreenState extends State<RegisterCustomerScreen> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Customer account created! Please login.'),
+            content: Text('Customer registered! Verification OTP sent to your email.'),
             backgroundColor: Colors.green,
           ),
         );
-        Navigator.pop(context);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (_) => EmailOtpVerificationScreen(email: registeredEmail),
+          ),
+        );
       }
     } catch (e) {
       if (mounted) {

@@ -19,6 +19,7 @@ class AuthProvider extends ChangeNotifier {
 
   String? get token => _token;
   UserModel? get currentUser => _currentUser;
+  UserModel? get user => _currentUser;
   bool get isLoading => _isLoading;
 
   void _setLoading(bool loading) {
@@ -137,6 +138,24 @@ class AuthProvider extends ChangeNotifier {
       return true;
     } catch (e) {
       return false;
+    }
+  }
+
+  /// Refreshes current user profile from backend server to sync status changes (e.g. approved deposit, verification)
+  Future<UserModel?> refreshProfile() async {
+    if (_token == null || _currentUser == null) return null;
+    try {
+      final updatedUser = await _authService.getProfile(_token!, _currentUser!.role);
+      _currentUser = updatedUser;
+
+      // Update SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setString('user_data', jsonEncode(_currentUser!.toJson()));
+
+      notifyListeners();
+      return _currentUser;
+    } catch (_) {
+      return _currentUser;
     }
   }
 

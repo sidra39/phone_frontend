@@ -9,6 +9,9 @@ class UserModel {
   final String? city;
   final String? shopName;
   final String? verificationStatus;
+  final String? securityDepositStatus;
+  final double? securityDepositAmount;
+  final String? securityDepositProof;
 
   UserModel({
     required this.id,
@@ -19,6 +22,9 @@ class UserModel {
     this.city,
     this.shopName,
     this.verificationStatus,
+    this.securityDepositStatus,
+    this.securityDepositAmount,
+    this.securityDepositProof,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -31,6 +37,11 @@ class UserModel {
       city: json['city'],
       shopName: json['shop_name'],
       verificationStatus: json['verification_status'],
+      securityDepositStatus: json['security_deposit_status'],
+      securityDepositAmount: json['security_deposit_amount'] != null
+          ? double.tryParse(json['security_deposit_amount'].toString())
+          : null,
+      securityDepositProof: json['security_deposit_proof'],
     );
   }
 
@@ -44,6 +55,9 @@ class UserModel {
       'city': city,
       'shop_name': shopName,
       'verification_status': verificationStatus,
+      'security_deposit_status': securityDepositStatus,
+      'security_deposit_amount': securityDepositAmount,
+      'security_deposit_proof': securityDepositProof,
     };
   }
 }

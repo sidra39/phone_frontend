@@ -276,22 +276,42 @@ class _BrowseHomeScreenState extends State<BrowseHomeScreen> {
                                   children: [
                                     // Product Image Thumbnail
                                     Expanded(
-                                      child: Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                          color: theme.scaffoldBackgroundColor,
-                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                                        ),
-                                        child: ClipRRect(
-                                          borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
-                                          child: fullImageUrl != null
-                                              ? Image.network(
-                                                  fullImageUrl,
-                                                  fit: BoxFit.cover,
-                                                  errorBuilder: (c, e, s) => const Icon(Icons.image_not_supported_rounded, color: Colors.grey, size: 36),
-                                                )
-                                              : const Icon(Icons.image_search_rounded, color: Colors.grey, size: 36),
-                                        ),
+                                      child: Stack(
+                                        children: [
+                                          Container(
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: theme.scaffoldBackgroundColor,
+                                              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                                            ),
+                                            child: ClipRRect(
+                                              borderRadius: const BorderRadius.vertical(top: Radius.circular(15)),
+                                              child: fullImageUrl != null
+                                                  ? Image.network(
+                                                      fullImageUrl,
+                                                      fit: BoxFit.cover,
+                                                      errorBuilder: (c, e, s) => const Icon(Icons.image_not_supported_rounded, color: Colors.grey, size: 36),
+                                                    )
+                                                  : const Icon(Icons.image_search_rounded, color: Colors.grey, size: 36),
+                                            ),
+                                          ),
+                                          if (part.stockQuantity <= 0 || part.status.toLowerCase() == 'out_of_stock')
+                                            Positioned(
+                                              top: 8,
+                                              left: 8,
+                                              child: Container(
+                                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                                decoration: BoxDecoration(
+                                                  color: Colors.red,
+                                                  borderRadius: BorderRadius.circular(6),
+                                                ),
+                                                child: const Text(
+                                                  'SOLD OUT',
+                                                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 10),
+                                                ),
+                                              ),
+                                            ),
+                                        ],
                                       ),
                                     ),
 

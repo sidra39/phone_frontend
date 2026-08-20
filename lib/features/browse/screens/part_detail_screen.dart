@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/api_constants.dart';
@@ -185,40 +186,211 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
   }
 
   Future<void> _submitPartRequest(String token) async {
-    setState(() => _isRequesting = true);
-    try {
-      await _customerService.createRequest(token, widget.partId);
-      if (mounted) {
-        showDialog(
-          context: context,
-          builder: (ctx) => AlertDialog(
-            backgroundColor: Theme.of(ctx).cardColor,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-            title: const Text('✅ Request Sent!'),
-            content: const Text(
-              'Your component request has been sent to the vendor. You will be notified as soon as they confirm availability.',
-            ),
-            actions: [
-              ElevatedButton(
-                onPressed: () => Navigator.pop(ctx),
-                child: const Text('OK'),
+    final theme = Theme.of(context);
+    String selectedDeliveryType = 'home_delivery';
+    final addressController = TextEditingController();
+    final cityController = TextEditingController();
+    final phoneController = TextEditingController();
+    final notesController = TextEditingController();
+    final formKey = GlobalKey<FormState>();
+
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: theme.cardColor,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+      ),
+      builder: (ctx) {
+        return StatefulBuilder(
+          builder: (context, setModalState) {
+            return Padding(
+              padding: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: 20,
+                bottom: MediaQuery.of(context).viewInsets.bottom + 20,
               ),
-            ],
-          ),
+              child: SingleChildScrollView(
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Center(
+                        child: Container(
+                          width: 40,
+                          height: 4,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        'Select Delivery Method',
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ChoiceChip(
+                              avatar: const Icon(Icons.local_shipping_rounded, size: 18),
+                              label: const Text('Home Delivery'),
+                              selected: selectedDeliveryType == 'home_delivery',
+                              selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                              onSelected: (val) {
+                                if (val) setModalState(() => selectedDeliveryType = 'home_delivery');
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: ChoiceChip(
+                              avatar: const Icon(Icons.storefront_rounded, size: 18),
+                              label: const Text('Shop Pickup'),
+                              selected: selectedDeliveryType == 'shop_pickup',
+                              selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                              onSelected: (val) {
+                                if (val) setModalState(() => selectedDeliveryType = 'shop_pickup');
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      if (selectedDeliveryType == 'home_delivery') ...[
+                        TextFormField(
+                          controller: addressController,
+                          decoration: InputDecoration(
+                            labelText: 'Delivery Address *',
+                            hintText: 'House/Street/Area Address',
+                            prefixIcon: Icon(Icons.home_rounded, color: theme.primaryColor),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          validator: (val) => val == null || val.trim().isEmpty ? 'Please enter delivery address' : null,
+                        ),
+                        const SizedBox(height: 12),
+                        Row(
+                          children: [
+                            Expanded(
+                              child: TextFormField(
+                                controller: cityController,
+                                decoration: InputDecoration(
+                                  labelText: 'City *',
+                                  hintText: 'e.g. Lahore / Karachi',
+                                  prefixIcon: Icon(Icons.location_city_rounded, color: theme.primaryColor),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                validator: (val) => val == null || val.trim().isEmpty ? 'Enter city' : null,
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Expanded(
+                              child: TextFormField(
+                                controller: phoneController,
+                                keyboardType: TextInputType.phone,
+                                decoration: InputDecoration(
+                                  labelText: 'Contact Phone *',
+                                  hintText: '03001234567',
+                                  prefixIcon: Icon(Icons.phone_rounded, color: theme.primaryColor),
+                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                ),
+                                validator: (val) => val == null || val.trim().isEmpty ? 'Enter contact phone' : null,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 12),
+                        TextFormField(
+                          controller: notesController,
+                          decoration: InputDecoration(
+                            labelText: 'Delivery Instructions (Optional)',
+                            hintText: 'Call before arriving / Deliver between 10am-5pm',
+                            prefixIcon: Icon(Icons.note_alt_rounded, color: theme.primaryColor),
+                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                      SizedBox(
+                        width: double.infinity,
+                        height: 48,
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                          ),
+                          onPressed: () async {
+                            if (selectedDeliveryType == 'home_delivery') {
+                              if (!formKey.currentState!.validate()) return;
+                            }
+                            final parentContext = context;
+                            Navigator.pop(ctx);
+                            setState(() => _isRequesting = true);
+                            try {
+                              await _customerService.createRequest(
+                                token,
+                                widget.partId,
+                                deliveryType: selectedDeliveryType,
+                                deliveryAddress: addressController.text.trim(),
+                                deliveryCity: cityController.text.trim(),
+                                deliveryPhone: phoneController.text.trim(),
+                                deliveryNotes: notesController.text.trim(),
+                              );
+                              if (mounted) {
+                                showDialog(
+                                  context: parentContext,
+                                  builder: (c) => AlertDialog(
+                                    backgroundColor: theme.cardColor,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                    title: Text(
+                                      selectedDeliveryType == 'home_delivery'
+                                          ? '🚚 Home Delivery Requested!'
+                                          : '🏪 Shop Pickup Requested!',
+                                    ),
+                                    content: Text(
+                                      selectedDeliveryType == 'home_delivery'
+                                          ? 'Your component request with Home Delivery details has been sent to the vendor. You will be notified as soon as they confirm availability & dispatch.'
+                                          : 'Your component request has been sent to the vendor for shop pickup.',
+                                    ),
+                                    actions: [
+                                      ElevatedButton(
+                                        onPressed: () => Navigator.pop(c),
+                                        child: const Text('OK'),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            } catch (e) {
+                              if (mounted) {
+                                final msg = e.toString().replaceAll('Exception: ', '');
+                                ScaffoldMessenger.of(parentContext).showSnackBar(
+                                  SnackBar(content: Text(msg), backgroundColor: Colors.red),
+                                );
+                              }
+                            } finally {
+                              if (mounted) {
+                                setState(() => _isRequesting = false);
+                              }
+                            }
+                          },
+                          child: const Text('Confirm Request', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          },
         );
-      }
-    } catch (e) {
-      if (mounted) {
-        final msg = e.toString().replaceAll('Exception: ', '');
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(msg), backgroundColor: Colors.red),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isRequesting = false);
-      }
-    }
+      },
+    );
   }
 
   @override
@@ -382,13 +554,27 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                 Container(
                   padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                   decoration: BoxDecoration(
-                    color: theme.scaffoldBackgroundColor,
+                    color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                        ? Colors.red.withValues(alpha: 0.15)
+                        : Colors.green.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: const Color(0xffE2E8F0)),
+                    border: Border.all(
+                      color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                          ? Colors.red
+                          : Colors.green,
+                    ),
                   ),
                   child: Text(
-                    'STOCK: $stock AVAILABLE',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.textTheme.bodyMedium?.color),
+                    (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                        ? '🚫 SOLD OUT'
+                        : '📦 IN STOCK: $stock AVAILABLE',
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                          ? Colors.red
+                          : Colors.green.shade800,
+                    ),
                   ),
                 ),
               ],
@@ -622,21 +808,33 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: _isRequesting ? null : _handleRequestAction,
-                  icon: const Icon(Icons.receipt_long_rounded),
+                  onPressed: (_isRequesting || stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                      ? null
+                      : _handleRequestAction,
+                  icon: Icon(
+                    (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                        ? Icons.block_rounded
+                        : Icons.receipt_long_rounded,
+                  ),
                   label: _isRequesting
                       ? const SizedBox(
                           height: 18,
                           width: 18,
                           child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
                         )
-                      : const Text(
-                          'Request Part',
-                          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                      : Text(
+                          (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                              ? 'SOLD OUT'
+                              : 'Request Part',
+                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
                         ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: theme.primaryColor,
+                    backgroundColor: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                        ? Colors.red.shade700
+                        : theme.primaryColor,
                     foregroundColor: Colors.white,
+                    disabledBackgroundColor: Colors.red.shade200,
+                    disabledForegroundColor: Colors.red.shade800,
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),

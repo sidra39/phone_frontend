@@ -19,6 +19,8 @@ class BrowsePartModel {
   final String vendorAddress;
   final double averageRating;
   final int reviewCount;
+  final int stockQuantity;
+  final String status;
 
   BrowsePartModel({
     required this.id,
@@ -39,6 +41,8 @@ class BrowsePartModel {
     required this.vendorAddress,
     required this.averageRating,
     required this.reviewCount,
+    this.stockQuantity = 1,
+    this.status = 'available',
   });
 
   factory BrowsePartModel.fromJson(Map<String, dynamic> json) {
@@ -61,6 +65,8 @@ class BrowsePartModel {
       vendorAddress: json['vendor_address'] ?? json['address'] ?? '',
       averageRating: json['average_rating'] != null ? double.parse(json['average_rating'].toString()) : 0.0,
       reviewCount: json['review_count'] is int ? json['review_count'] : int.parse((json['review_count'] ?? 0).toString()),
+      stockQuantity: json['stock_quantity'] != null ? int.parse(json['stock_quantity'].toString()) : 1,
+      status: json['status'] ?? 'available',
     );
   }
 }

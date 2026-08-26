@@ -1,0 +1,32 @@
+[33mfda9af2[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m full project
+ lib/core/network/api_client.dart                   |  37 [32m+[m[31m-[m
+ lib/features/admin/models/vendor_admin_model.dart  |  11 [32m+[m
+ .../admin/screens/admin_dashboard_screen.dart      |  11 [32m+[m[31m-[m
+ .../admin/screens/system_settings_screen.dart      | 261 [32m++++++++++++++[m
+ .../admin/screens/vendor_management_screen.dart    | 224 [32m++++++++++++[m
+ lib/features/admin/services/admin_service.dart     |  16 [32m+[m
+ lib/features/auth/models/user_model.dart           |  14 [32m+[m
+ .../screens/email_otp_verification_screen.dart     | 239 [32m+++++++++++++[m
+ lib/features/auth/screens/login_screen.dart        |  46 [32m++[m[31m-[m
+ .../auth/screens/register_customer_screen.dart     |  13 [32m+[m[31m-[m
+ .../auth/screens/register_vendor_screen.dart       |  15 [32m+[m[31m-[m
+ lib/features/auth/services/auth_provider.dart      |  19 [32m+[m
+ lib/features/auth/services/auth_service.dart       |  21 [32m++[m
+ lib/features/browse/models/browse_part_model.dart  |   6 [32m+[m
+ .../browse/screens/browse_home_screen.dart         |  52 [32m++[m[31m-[m
+ .../browse/screens/part_detail_screen.dart         | 282 [32m++++++++++++[m[31m---[m
+ lib/features/customer/models/request_model.dart    |  24 [32m++[m
+ .../screens/customer_dashboard_screen.dart         |  48 [32m++[m[31m-[m
+ .../customer/screens/my_requests_screen.dart       |  83 [32m++++[m[31m-[m
+ .../customer/screens/qr_scanner_screen.dart        | 180 [32m++++[m[31m------[m
+ lib/features/customer/screens/search_screen.dart   |  21 [32m+[m[31m-[m
+ .../customer/services/customer_service.dart        |  24 [32m+[m[31m-[m
+ lib/features/vendor/models/lead_request_model.dart |  24 [32m++[m
+ .../vendor/screens/add_edit_part_screen.dart       |  33 [32m+[m[31m-[m
+ .../vendor/screens/commission_payment_screen.dart  | 189 [32m+++++++[m[31m---[m
+ lib/features/vendor/screens/leads_screen.dart      | 204 [32m++++++++++[m[31m-[m
+ .../vendor/screens/my_commissions_screen.dart      |   6 [32m+[m
+ lib/features/vendor/screens/my_parts_screen.dart   |  17 [32m+[m
+ .../vendor/screens/vendor_dashboard_screen.dart    | 391 [32m++++++++++++++++++++[m[31m-[m
+ lib/features/vendor/services/vendor_service.dart   |  74 [32m+++[m[31m-[m
+ 30 files changed, 2292 insertions(+), 293 deletions(-)

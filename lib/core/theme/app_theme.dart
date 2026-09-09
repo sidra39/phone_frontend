@@ -41,15 +41,7 @@ class AppTheme {
       textTheme: const TextTheme(
         bodyLarge: TextStyle(color: primaryTextColor, fontSize: 16),
         bodyMedium: TextStyle(color: secondaryTextColor, fontSize: 14),
-<<<<<<< HEAD
         titleLarge: TextStyle(color: primaryTextColor, fontWeight: FontWeight.bold, fontSize: 20),
-=======
-        titleLarge: TextStyle(
-          color: primaryTextColor,
-          fontWeight: FontWeight.bold,
-          fontSize: 20,
-        ),
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02
       ),
 
       // AppBar Theme
@@ -73,14 +65,10 @@ class AppTheme {
           backgroundColor: primaryColor,
           foregroundColor: Colors.white,
           elevation: 0,
-<<<<<<< HEAD
           textStyle: const TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 15,
           ),
-=======
-          textStyle: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02
           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -106,14 +94,7 @@ class AppTheme {
         fillColor: surfaceColor,
         hintStyle: const TextStyle(color: secondaryTextColor, fontSize: 14),
         labelStyle: const TextStyle(color: secondaryTextColor, fontSize: 14),
-<<<<<<< HEAD
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-=======
-        contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 14,
-        ),
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: borderColor),
@@ -148,8 +129,4 @@ class AppTheme {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

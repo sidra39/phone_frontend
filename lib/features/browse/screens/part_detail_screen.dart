@@ -151,7 +151,10 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
       builder: (ctx) => AlertDialog(
         backgroundColor: theme.cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Account Required', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Account Required',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
         content: const Text(
           'Please sign in or create a customer account to request phone components directly from vendors.',
         ),
@@ -162,7 +165,8 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (_) => RegisterCustomerScreen(returnToPartId: widget.partId),
+                  builder: (_) =>
+                      RegisterCustomerScreen(returnToPartId: widget.partId),
                 ),
               );
             },
@@ -231,31 +235,53 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                       const SizedBox(height: 16),
                       const Text(
                         'Select Delivery Method',
-                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       const SizedBox(height: 12),
                       Row(
                         children: [
                           Expanded(
                             child: ChoiceChip(
-                              avatar: const Icon(Icons.local_shipping_rounded, size: 18),
+                              avatar: const Icon(
+                                Icons.local_shipping_rounded,
+                                size: 18,
+                              ),
                               label: const Text('Home Delivery'),
                               selected: selectedDeliveryType == 'home_delivery',
-                              selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                              selectedColor: theme.primaryColor.withValues(
+                                alpha: 0.2,
+                              ),
                               onSelected: (val) {
-                                if (val) setModalState(() => selectedDeliveryType = 'home_delivery');
+                                if (val) {
+                                  setModalState(
+                                    () =>
+                                        selectedDeliveryType = 'home_delivery',
+                                  );
+                                }
                               },
                             ),
                           ),
                           const SizedBox(width: 10),
                           Expanded(
                             child: ChoiceChip(
-                              avatar: const Icon(Icons.storefront_rounded, size: 18),
+                              avatar: const Icon(
+                                Icons.storefront_rounded,
+                                size: 18,
+                              ),
                               label: const Text('Shop Pickup'),
                               selected: selectedDeliveryType == 'shop_pickup',
-                              selectedColor: theme.primaryColor.withValues(alpha: 0.2),
+                              selectedColor: theme.primaryColor.withValues(
+                                alpha: 0.2,
+                              ),
                               onSelected: (val) {
-                                if (val) setModalState(() => selectedDeliveryType = 'shop_pickup');
+                                if (val) {
+                                  setModalState(
+                                    () => selectedDeliveryType = 'shop_pickup',
+                                  );
+                                }
                               },
                             ),
                           ),
@@ -268,10 +294,17 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                           decoration: InputDecoration(
                             labelText: 'Delivery Address *',
                             hintText: 'House/Street/Area Address',
-                            prefixIcon: Icon(Icons.home_rounded, color: theme.primaryColor),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            prefixIcon: Icon(
+                              Icons.home_rounded,
+                              color: theme.primaryColor,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
-                          validator: (val) => val == null || val.trim().isEmpty ? 'Please enter delivery address' : null,
+                          validator: (val) => val == null || val.trim().isEmpty
+                              ? 'Please enter delivery address'
+                              : null,
                         ),
                         const SizedBox(height: 12),
                         Row(
@@ -282,10 +315,18 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'City *',
                                   hintText: 'e.g. Lahore / Karachi',
-                                  prefixIcon: Icon(Icons.location_city_rounded, color: theme.primaryColor),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  prefixIcon: Icon(
+                                    Icons.location_city_rounded,
+                                    color: theme.primaryColor,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
-                                validator: (val) => val == null || val.trim().isEmpty ? 'Enter city' : null,
+                                validator: (val) =>
+                                    val == null || val.trim().isEmpty
+                                    ? 'Enter city'
+                                    : null,
                               ),
                             ),
                             const SizedBox(width: 10),
@@ -296,10 +337,18 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                                 decoration: InputDecoration(
                                   labelText: 'Contact Phone *',
                                   hintText: '03001234567',
-                                  prefixIcon: Icon(Icons.phone_rounded, color: theme.primaryColor),
-                                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                                  prefixIcon: Icon(
+                                    Icons.phone_rounded,
+                                    color: theme.primaryColor,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
                                 ),
-                                validator: (val) => val == null || val.trim().isEmpty ? 'Enter contact phone' : null,
+                                validator: (val) =>
+                                    val == null || val.trim().isEmpty
+                                    ? 'Enter contact phone'
+                                    : null,
                               ),
                             ),
                           ],
@@ -309,9 +358,15 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                           controller: notesController,
                           decoration: InputDecoration(
                             labelText: 'Delivery Instructions (Optional)',
-                            hintText: 'Call before arriving / Deliver between 10am-5pm',
-                            prefixIcon: Icon(Icons.note_alt_rounded, color: theme.primaryColor),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
+                            hintText:
+                                'Call before arriving / Deliver between 10am-5pm',
+                            prefixIcon: Icon(
+                              Icons.note_alt_rounded,
+                              color: theme.primaryColor,
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                         ),
                         const SizedBox(height: 20),
@@ -322,7 +377,9 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
                             backgroundColor: theme.primaryColor,
-                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
                           ),
                           onPressed: () async {
                             if (selectedDeliveryType == 'home_delivery') {
@@ -346,7 +403,9 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                                   context: parentContext,
                                   builder: (c) => AlertDialog(
                                     backgroundColor: theme.cardColor,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
                                     title: Text(
                                       selectedDeliveryType == 'home_delivery'
                                           ? '🚚 Home Delivery Requested!'
@@ -368,9 +427,17 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                               }
                             } catch (e) {
                               if (mounted) {
-                                final msg = e.toString().replaceAll('Exception: ', '');
-                                ScaffoldMessenger.of(parentContext).showSnackBar(
-                                  SnackBar(content: Text(msg), backgroundColor: Colors.red),
+                                final msg = e.toString().replaceAll(
+                                  'Exception: ',
+                                  '',
+                                );
+                                ScaffoldMessenger.of(
+                                  parentContext,
+                                ).showSnackBar(
+                                  SnackBar(
+                                    content: Text(msg),
+                                    backgroundColor: Colors.red,
+                                  ),
                                 );
                               }
                             } finally {
@@ -379,7 +446,13 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                               }
                             }
                           },
-                          child: const Text('Confirm Request', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                          child: const Text(
+                            'Confirm Request',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
                         ),
                       ),
                     ],
@@ -411,27 +484,38 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
       );
     }
 
-    final relativePhotoUrl = _partData!['original_photo_url'] ?? _partData!['image_url'];
-    final String? fullPhotoUrl = relativePhotoUrl != null && relativePhotoUrl.toString().isNotEmpty
+    final relativePhotoUrl =
+        _partData!['original_photo_url'] ?? _partData!['image_url'];
+    final String? fullPhotoUrl =
+        relativePhotoUrl != null && relativePhotoUrl.toString().isNotEmpty
         ? '${ApiConstants.baseUrl}$relativePhotoUrl'
         : null;
 
     final relativeBarcodePhotoUrl = _partData!['barcode_photo_url'];
-    final String? fullBarcodePhotoUrl = relativeBarcodePhotoUrl != null && relativeBarcodePhotoUrl.toString().isNotEmpty
+    final String? fullBarcodePhotoUrl =
+        relativeBarcodePhotoUrl != null &&
+            relativeBarcodePhotoUrl.toString().isNotEmpty
         ? '${ApiConstants.baseUrl}$relativeBarcodePhotoUrl'
         : null;
     final String barcodeNumber = _partData!['barcode_number'] ?? 'N/A';
 
-    final double price = double.tryParse((_partData!['price'] ?? 0).toString()) ?? 0.0;
-    final String condition = (_partData!['condition_type'] ?? 'new').toString().toUpperCase();
-    final int stock = int.tryParse((_partData!['stock_quantity'] ?? 1).toString()) ?? 1;
+    final double price =
+        double.tryParse((_partData!['price'] ?? 0).toString()) ?? 0.0;
+    final String condition = (_partData!['condition_type'] ?? 'new')
+        .toString()
+        .toUpperCase();
+    final int stock =
+        int.tryParse((_partData!['stock_quantity'] ?? 1).toString()) ?? 1;
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: theme.cardColor,
         elevation: 1,
-        title: Text(_partData!['model_name'] ?? 'Part Details', style: const TextStyle(fontWeight: FontWeight.bold)),
+        title: Text(
+          _partData!['model_name'] ?? 'Part Details',
+          style: const TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -463,17 +547,33 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                             ? Image.network(
                                 fullPhotoUrl,
                                 fit: BoxFit.cover,
-                                errorBuilder: (c, e, s) => const Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey),
+                                errorBuilder: (c, e, s) => const Icon(
+                                  Icons.broken_image_rounded,
+                                  size: 60,
+                                  color: Colors.grey,
+                                ),
                               )
-                            : const Icon(Icons.image_search_rounded, size: 60, color: Colors.grey),
+                            : const Icon(
+                                Icons.image_search_rounded,
+                                size: 60,
+                                color: Colors.grey,
+                              ),
                         // Slide 2: Barcode Packaging Photo
                         fullBarcodePhotoUrl != null
                             ? Image.network(
                                 fullBarcodePhotoUrl,
                                 fit: BoxFit.cover,
-                                errorBuilder: (c, e, s) => const Icon(Icons.broken_image_rounded, size: 60, color: Colors.grey),
+                                errorBuilder: (c, e, s) => const Icon(
+                                  Icons.broken_image_rounded,
+                                  size: 60,
+                                  color: Colors.grey,
+                                ),
                               )
-                            : const Icon(Icons.qr_code_2_rounded, size: 60, color: Colors.grey),
+                            : const Icon(
+                                Icons.qr_code_2_rounded,
+                                size: 60,
+                                color: Colors.grey,
+                              ),
                       ],
                     ),
                   ),
@@ -488,7 +588,9 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                       height: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _galleryIndex == 0 ? theme.primaryColor : Colors.grey.shade400,
+                        color: _galleryIndex == 0
+                            ? theme.primaryColor
+                            : Colors.grey.shade400,
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -497,7 +599,9 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                       height: 8,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: _galleryIndex == 1 ? theme.primaryColor : Colors.grey.shade400,
+                        color: _galleryIndex == 1
+                            ? theme.primaryColor
+                            : Colors.grey.shade400,
                       ),
                     ),
                   ],
@@ -517,19 +621,30 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                     children: [
                       Text(
                         _partData!['model_name'] ?? '',
-                        style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+                        style: TextStyle(
+                          fontSize: 22,
+                          fontWeight: FontWeight.bold,
+                          color: theme.textTheme.bodyLarge?.color,
+                        ),
                       ),
                       const SizedBox(height: 4),
                       Text(
                         '${_partData!['brand_name'] ?? ''} • ${_partData!['part_type_name'] ?? ''}',
-                        style: TextStyle(fontSize: 14, color: theme.textTheme.bodyMedium?.color),
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: theme.textTheme.bodyMedium?.color,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Text(
                   '\$${price.toStringAsFixed(2)}',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold, color: theme.primaryColor),
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: theme.primaryColor,
+                  ),
                 ),
               ],
             ),
@@ -539,39 +654,70 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: theme.primaryColor.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
-                    border: Border.all(color: theme.primaryColor.withValues(alpha: 0.4)),
+                    border: Border.all(
+                      color: theme.primaryColor.withValues(alpha: 0.4),
+                    ),
                   ),
                   child: Text(
                     'CONDITION: $condition',
-                    style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: theme.primaryColor),
+                    style: TextStyle(
+                      fontSize: 11,
+                      fontWeight: FontWeight.bold,
+                      color: theme.primaryColor,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 12),
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
-                    color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                    color:
+                        (stock <= 0 ||
+                            (_partData!['status'] ?? '')
+                                    .toString()
+                                    .toLowerCase() ==
+                                'out_of_stock')
                         ? Colors.red.withValues(alpha: 0.15)
                         : Colors.green.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(8),
                     border: Border.all(
-                      color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                      color:
+                          (stock <= 0 ||
+                              (_partData!['status'] ?? '')
+                                      .toString()
+                                      .toLowerCase() ==
+                                  'out_of_stock')
                           ? Colors.red
                           : Colors.green,
                     ),
                   ),
                   child: Text(
-                    (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                    (stock <= 0 ||
+                            (_partData!['status'] ?? '')
+                                    .toString()
+                                    .toLowerCase() ==
+                                'out_of_stock')
                         ? '🚫 SOLD OUT'
                         : '📦 IN STOCK: $stock AVAILABLE',
                     style: TextStyle(
                       fontSize: 11,
                       fontWeight: FontWeight.bold,
-                      color: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                      color:
+                          (stock <= 0 ||
+                              (_partData!['status'] ?? '')
+                                      .toString()
+                                      .toLowerCase() ==
+                                  'out_of_stock')
                           ? Colors.red
                           : Colors.green.shade800,
                     ),
@@ -594,12 +740,20 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                 children: [
                   Row(
                     children: [
-                      Icon(Icons.storefront_rounded, color: theme.primaryColor, size: 24),
+                      Icon(
+                        Icons.storefront_rounded,
+                        color: theme.primaryColor,
+                        size: 24,
+                      ),
                       const SizedBox(width: 10),
                       Expanded(
                         child: Text(
                           _partData!['shop_name'] ?? 'Vendor Shop',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: theme.textTheme.bodyLarge?.color,
+                          ),
                         ),
                       ),
                     ],
@@ -607,7 +761,10 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                   const SizedBox(height: 8),
                   Text(
                     'Location: ${_partData!['vendor_address'] ?? ''}, ${_partData!['vendor_city'] ?? ''}',
-                    style: TextStyle(fontSize: 13, color: theme.textTheme.bodyMedium?.color),
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: theme.textTheme.bodyMedium?.color,
+                    ),
                   ),
                 ],
               ),
@@ -633,10 +790,16 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                     children: [
                       const Text(
                         'Manufacturer Barcode / QR:',
-                        style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
+                        ),
                         decoration: BoxDecoration(
                           color: theme.primaryColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
@@ -667,17 +830,31 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                               decoration: BoxDecoration(
                                 color: theme.scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: const Color(0xffE2E8F0)),
+                                border: Border.all(
+                                  color: const Color(0xffE2E8F0),
+                                ),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: fullPhotoUrl != null
-                                    ? Image.network(fullPhotoUrl, fit: BoxFit.cover)
-                                    : const Icon(Icons.image_rounded, color: Colors.grey),
+                                    ? Image.network(
+                                        fullPhotoUrl,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const Icon(
+                                        Icons.image_rounded,
+                                        color: Colors.grey,
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 6),
-                            Text('Original Product Photo', style: TextStyle(fontSize: 12, color: theme.textTheme.bodyMedium?.color)),
+                            Text(
+                              'Original Product Photo',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -693,17 +870,32 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                               decoration: BoxDecoration(
                                 color: theme.scaffoldBackgroundColor,
                                 borderRadius: BorderRadius.circular(12),
-                                border: Border.all(color: const Color(0xffE2E8F0)),
+                                border: Border.all(
+                                  color: const Color(0xffE2E8F0),
+                                ),
                               ),
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(12),
                                 child: fullBarcodePhotoUrl != null
-                                    ? Image.network(fullBarcodePhotoUrl, fit: BoxFit.cover)
-                                    : const Icon(Icons.qr_code_2_rounded, color: Colors.grey, size: 36),
+                                    ? Image.network(
+                                        fullBarcodePhotoUrl,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : const Icon(
+                                        Icons.qr_code_2_rounded,
+                                        color: Colors.grey,
+                                        size: 36,
+                                      ),
                               ),
                             ),
                             const SizedBox(height: 6),
-                            Text('Barcode Packaging Photo', style: TextStyle(fontSize: 12, color: theme.textTheme.bodyMedium?.color)),
+                            Text(
+                              'Barcode Packaging Photo',
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: theme.textTheme.bodyMedium?.color,
+                              ),
+                            ),
                           ],
                         ),
                       ),
@@ -717,7 +909,11 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
             // Customer Reviews Header
             Text(
               'Vendor Reviews & Feedback',
-              style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold, color: theme.textTheme.bodyLarge?.color),
+              style: TextStyle(
+                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                color: theme.textTheme.bodyLarge?.color,
+              ),
             ),
             const SizedBox(height: 12),
 
@@ -730,7 +926,10 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                       border: Border.all(color: const Color(0xffCCCCCC)),
                     ),
                     child: const Center(
-                      child: Text('No reviews submitted for this vendor yet', style: TextStyle(color: Colors.grey)),
+                      child: Text(
+                        'No reviews submitted for this vendor yet',
+                        style: TextStyle(color: Colors.grey),
+                      ),
                     ),
                   )
                 : ListView.builder(
@@ -755,20 +954,40 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                               children: [
                                 Text(
                                   rev.customerName ?? 'Verified Customer',
-                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 13,
+                                  ),
                                 ),
                                 Row(
                                   children: [
-                                    const Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                                    const Icon(
+                                      Icons.star_rounded,
+                                      color: Colors.amber,
+                                      size: 16,
+                                    ),
                                     const SizedBox(width: 2),
-                                    Text('${rev.rating}', style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13)),
+                                    Text(
+                                      '${rev.rating}',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 13,
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ],
                             ),
-                            if (rev.comment != null && rev.comment!.isNotEmpty) ...[
+                            if (rev.comment != null &&
+                                rev.comment!.isNotEmpty) ...[
                               const SizedBox(height: 6),
-                              Text(rev.comment!, style: TextStyle(fontSize: 12, color: Colors.grey.shade700)),
+                              Text(
+                                rev.comment!,
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  color: Colors.grey.shade700,
+                                ),
+                              ),
                             ],
                           ],
                         ),
@@ -800,7 +1019,9 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                   style: OutlinedButton.styleFrom(
                     side: BorderSide(color: theme.primaryColor, width: 1.5),
                     foregroundColor: theme.primaryColor,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
@@ -808,11 +1029,21 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
               const SizedBox(width: 12),
               Expanded(
                 child: ElevatedButton.icon(
-                  onPressed: (_isRequesting || stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                  onPressed:
+                      (_isRequesting ||
+                          stock <= 0 ||
+                          (_partData!['status'] ?? '')
+                                  .toString()
+                                  .toLowerCase() ==
+                              'out_of_stock')
                       ? null
                       : _handleRequestAction,
                   icon: Icon(
-                    (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                    (stock <= 0 ||
+                            (_partData!['status'] ?? '')
+                                    .toString()
+                                    .toLowerCase() ==
+                                'out_of_stock')
                         ? Icons.block_rounded
                         : Icons.receipt_long_rounded,
                   ),
@@ -820,22 +1051,39 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
                       ? const SizedBox(
                           height: 18,
                           width: 18,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : Text(
-                          (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                          (stock <= 0 ||
+                                  (_partData!['status'] ?? '')
+                                          .toString()
+                                          .toLowerCase() ==
+                                      'out_of_stock')
                               ? 'SOLD OUT'
                               : 'Request Part',
-                          style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: (stock <= 0 || (_partData!['status'] ?? '').toString().toLowerCase() == 'out_of_stock')
+                    backgroundColor:
+                        (stock <= 0 ||
+                            (_partData!['status'] ?? '')
+                                    .toString()
+                                    .toLowerCase() ==
+                                'out_of_stock')
                         ? Colors.red.shade700
                         : theme.primaryColor,
                     foregroundColor: Colors.white,
                     disabledBackgroundColor: Colors.red.shade200,
                     disabledForegroundColor: Colors.red.shade800,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
                     padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
                 ),
@@ -846,8 +1094,4 @@ class _PartDetailScreenState extends State<PartDetailScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

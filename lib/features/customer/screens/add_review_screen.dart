@@ -38,7 +38,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
         token,
         requestId: widget.request.id,
         rating: _selectedRating,
-        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+        comment: _commentController.text.trim().isEmpty
+            ? null
+            : _commentController.text.trim(),
       );
 
       if (mounted) {
@@ -68,7 +70,10 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
       appBar: AppBar(
         backgroundColor: Theme.of(context).cardColor,
         elevation: 0,
-        title: const Text('Leave Shop Review', style: TextStyle(fontWeight: FontWeight.bold)),
+        title: const Text(
+          'Leave Shop Review',
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),
@@ -116,7 +121,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 children: [
                   const Text(
                     'Rate Your Experience',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff212121)),
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff212121),
+                    ),
                   ),
                   const SizedBox(height: 14),
 
@@ -127,7 +136,9 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                       return IconButton(
                         iconSize: 40,
                         icon: Icon(
-                          starValue <= _selectedRating ? Icons.star_rounded : Icons.star_outline_rounded,
+                          starValue <= _selectedRating
+                              ? Icons.star_rounded
+                              : Icons.star_outline_rounded,
                           color: Colors.amber,
                         ),
                         onPressed: () {
@@ -141,7 +152,11 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                   const SizedBox(height: 8),
                   Text(
                     '$_selectedRating / 5 Stars',
-                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber),
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.amber,
+                    ),
                   ),
                 ],
               ),
@@ -155,7 +170,8 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
               maxLines: 4,
               decoration: InputDecoration(
                 labelText: 'Comment / Review (Optional)',
-                hintText: 'Share details about part condition, vendor response time, etc.',
+                hintText:
+                    'Share details about part condition, vendor response time, etc.',
                 labelStyle: const TextStyle(color: Colors.grey),
                 hintStyle: TextStyle(color: Colors.grey.shade600),
                 filled: true,
@@ -178,15 +194,27 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
                 onPressed: _isSubmitting ? null : _submitReview,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.amber,
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
                 ),
                 child: _isSubmitting
                     ? const SizedBox(
                         height: 20,
                         width: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: Colors.black,
+                        ),
                       )
-                    : const Text('Submit Review', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
+                    : const Text(
+                        'Submit Review',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
               ),
             ),
           ],
@@ -194,8 +222,4 @@ class _AddReviewScreenState extends State<AddReviewScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

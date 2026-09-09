@@ -181,7 +181,7 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
                 ),
                 const SizedBox(height: 14),
                 Text(
-                  'Loading Phone Parts Finder...',
+                  'Loading Mobile Part Finder...',
                   style: TextStyle(
                     color: Colors.grey.shade500,
                     fontSize: 12,
@@ -195,8 +195,4 @@ class _SplashScreenState extends State<SplashScreen> with SingleTickerProviderSt
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

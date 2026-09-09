@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/notification_bell_icon.dart';
+import '../../../core/constants/api_constants.dart';
 import '../../auth/services/auth_provider.dart';
 import '../../reports/screens/submit_report_screen.dart';
 import '../models/request_model.dart';
@@ -131,33 +132,75 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Expanded(
-                                  child: Text(
-                                    req.modelName,
-                                    style: TextStyle(
-                                      fontSize: 17,
-                                      fontWeight: FontWeight.bold,
-                                      color: theme.textTheme.bodyLarge?.color,
-                                    ),
+                                // Product Image Thumbnail (Always persistent)
+                                Container(
+                                  width: 65,
+                                  height: 65,
+                                  decoration: BoxDecoration(
+                                    color: theme.scaffoldBackgroundColor,
+                                    borderRadius: BorderRadius.circular(12),
+                                    border: Border.all(color: const Color(0xffCCCCCC)),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(10),
+                                    child: req.imageUrl != null && req.imageUrl!.isNotEmpty
+                                        ? Image.network(
+                                            req.imageUrl!.startsWith('http')
+                                                ? req.imageUrl!
+                                                : '${ApiConstants.baseUrl}${req.imageUrl}',
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (context, error, stackTrace) => const Icon(Icons.build_circle_rounded, size: 36, color: Colors.grey),
+                                          )
+                                        : const Icon(Icons.build_circle_rounded, size: 36, color: Colors.grey),
                                   ),
                                 ),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                                  decoration: BoxDecoration(
-                                    color: statusColor.withValues(alpha: 0.15),
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(color: statusColor.withValues(alpha: 0.5)),
-                                  ),
-                                  child: Text(
-                                    req.status.replaceAll('_', ' ').toUpperCase(),
-                                    style: TextStyle(
-                                      color: statusColor,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 11,
-                                      letterSpacing: 0.5,
-                                    ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Expanded(
+                                            child: Text(
+                                              req.modelName,
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: theme.textTheme.bodyLarge?.color,
+                                              ),
+                                            ),
+                                          ),
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              color: statusColor.withValues(alpha: 0.15),
+                                              borderRadius: BorderRadius.circular(10),
+                                              border: Border.all(color: statusColor.withValues(alpha: 0.5)),
+                                            ),
+                                            child: Text(
+                                              req.status == 'available'
+                                                  ? '🏷️ BOOKED / SOLD'
+                                                  : req.status.replaceAll('_', ' ').toUpperCase(),
+                                              style: TextStyle(
+                                                color: statusColor,
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 10,
+                                                letterSpacing: 0.5,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      const SizedBox(height: 4),
+                                      Text(
+                                        'Shop: ${req.shopName} (${req.vendorCity})',
+                                        style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontWeight: FontWeight.w500, fontSize: 12),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ],
@@ -217,23 +260,35 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                                ),
                              ],
                              const SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  'Price: \$${req.price.toStringAsFixed(2)}',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    color: theme.primaryColor,
-                                    fontSize: 15,
-                                  ),
-                                ),
-                                Text(
-                                  req.createdAt.split('T').first,
-                                  style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
-                                ),
-                              ],
-                            ),
+                             Row(
+                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                               children: [
+                                 Column(
+                                   crossAxisAlignment: CrossAxisAlignment.start,
+                                   children: [
+                                     Text(
+                                       req.deliveryType == 'home_delivery'
+                                           ? 'Total Bill: \$${(req.totalAmount > 0 ? req.totalAmount : req.price + 200).toStringAsFixed(2)}'
+                                           : 'Total Bill: \$${req.price.toStringAsFixed(2)}',
+                                       style: TextStyle(
+                                         fontWeight: FontWeight.bold,
+                                         color: theme.primaryColor,
+                                         fontSize: 15,
+                                       ),
+                                     ),
+                                     if (req.deliveryType == 'home_delivery')
+                                       const Text(
+                                         'Part + Delivery Fee (Rs. 200)',
+                                         style: TextStyle(fontSize: 11, color: Colors.blueAccent, fontWeight: FontWeight.w500),
+                                       ),
+                                   ],
+                                 ),
+                                 Text(
+                                   req.createdAt.split('T').first,
+                                   style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
+                                 ),
+                               ],
+                             ),
                             const SizedBox(height: 14),
                             const Divider(color: Color(0xffE2E8F0), height: 1),
                             const SizedBox(height: 12),
@@ -313,8 +368,4 @@ class _MyRequestsScreenState extends State<MyRequestsScreen> {
                 ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

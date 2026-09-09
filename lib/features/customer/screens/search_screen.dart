@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/notification_bell_icon.dart';
+import '../../../core/constants/api_constants.dart';
 import '../../auth/services/auth_provider.dart';
 import '../../vendor/models/category_model.dart';
 import '../models/search_result_model.dart';
@@ -323,32 +324,67 @@ class _SearchScreenState extends State<SearchScreen> {
                                         crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                            crossAxisAlignment: CrossAxisAlignment.start,
                                             children: [
-                                              Expanded(
-                                                child: Text(
-                                                  part.modelName,
-                                                  style: TextStyle(
-                                                    fontSize: 18,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: theme.textTheme.bodyLarge?.color,
-                                                  ),
+                                              // Part Photo Thumbnail
+                                              Container(
+                                                width: 65,
+                                                height: 65,
+                                                decoration: BoxDecoration(
+                                                  color: theme.scaffoldBackgroundColor,
+                                                  borderRadius: BorderRadius.circular(12),
+                                                  border: Border.all(color: const Color(0xffCCCCCC)),
+                                                ),
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius.circular(10),
+                                                  child: part.imageUrl != null && part.imageUrl!.isNotEmpty
+                                                      ? Image.network(
+                                                          part.imageUrl!.startsWith('http')
+                                                              ? part.imageUrl!
+                                                              : '${ApiConstants.baseUrl}${part.imageUrl}',
+                                                          fit: BoxFit.cover,
+                                                          errorBuilder: (context, error, stackTrace) => const Icon(Icons.build_circle_rounded, size: 36, color: Colors.grey),
+                                                        )
+                                                      : const Icon(Icons.build_circle_rounded, size: 36, color: Colors.grey),
                                                 ),
                                               ),
-                                              Text(
-                                                '\$${part.price.toStringAsFixed(2)}',
-                                                style: TextStyle(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: theme.primaryColor,
+                                              const SizedBox(width: 12),
+                                              Expanded(
+                                                child: Column(
+                                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                                  children: [
+                                                    Row(
+                                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Text(
+                                                            part.modelName,
+                                                            style: TextStyle(
+                                                              fontSize: 17,
+                                                              fontWeight: FontWeight.bold,
+                                                              color: theme.textTheme.bodyLarge?.color,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(
+                                                          '\$${part.price.toStringAsFixed(2)}',
+                                                          style: TextStyle(
+                                                            fontSize: 18,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: theme.primaryColor,
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 4),
+                                                    Text(
+                                                      '${part.brandName ?? 'Brand'} • ${part.partTypeName ?? 'Type'} • ${part.conditionType.toUpperCase()}',
+                                                      style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 12),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
                                             ],
-                                          ),
-                                          const SizedBox(height: 6),
-                                          Text(
-                                            '${part.brandName ?? 'Brand'} • ${part.partTypeName ?? 'Type'} • ${part.conditionType.toUpperCase()}',
-                                            style: TextStyle(color: theme.textTheme.bodyMedium?.color, fontSize: 13),
                                           ),
                                           const SizedBox(height: 12),
                                           Row(
@@ -395,8 +431,4 @@ class _SearchScreenState extends State<SearchScreen> {
             ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

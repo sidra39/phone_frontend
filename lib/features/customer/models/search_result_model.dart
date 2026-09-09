@@ -1,61 +1,197 @@
-/// SearchResultModel
-/// Data model representing a part search result with part details, vendor info, and average rating.
-class SearchResultModel {
-  final int id;
-  final String modelName;
-  final double price;
-  final String conditionType;
-  final int stockQuantity;
-  final String? imageUrl;
-  final String status;
-  final int vendorId;
-  final String shopName;
-  final String vendorCity;
-  final String vendorAddress;
-  final String? brandName;
-  final String? partTypeName;
-  final double averageRating;
-  final int reviewCount;
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../auth/services/auth_provider.dart';
+import '../models/request_model.dart';
+import '../services/customer_service.dart';
 
-  SearchResultModel({
-    required this.id,
-    required this.modelName,
-    required this.price,
-    required this.conditionType,
-    required this.stockQuantity,
-    this.imageUrl,
-    required this.status,
-    required this.vendorId,
-    required this.shopName,
-    required this.vendorCity,
-    required this.vendorAddress,
-    this.brandName,
-    this.partTypeName,
-    required this.averageRating,
-    required this.reviewCount,
-  });
+/// AddReviewScreen
+/// Interactive form for submitting a review and rating for a vendor request with amber star animations.
+class AddReviewScreen extends StatefulWidget {
+  final RequestModel request;
 
-  factory SearchResultModel.fromJson(Map<String, dynamic> json) {
-    return SearchResultModel(
-      id: json['id'] is int ? json['id'] : int.parse(json['id'].toString()),
-      modelName: json['model_name'] ?? '',
-      price: json['price'] != null ? double.parse(json['price'].toString()) : 0.0,
-      conditionType: json['condition_type'] ?? 'new',
-      stockQuantity: json['stock_quantity'] is int
-          ? json['stock_quantity']
-          : int.parse((json['stock_quantity'] ?? 0).toString()),
-      imageUrl: json['image_url'],
-      status: json['status'] ?? 'available',
-      vendorId: json['vendor_id'] is int ? json['vendor_id'] : int.parse(json['vendor_id'].toString()),
-      shopName: json['shop_name'] ?? '',
-      vendorCity: json['vendor_city'] ?? '',
-      vendorAddress: json['vendor_address'] ?? '',
-      brandName: json['brand_name'],
-      partTypeName: json['part_type_name'],
-      averageRating: json['average_rating'] != null ? double.parse(json['average_rating'].toString()) : 0.0,
-      reviewCount: json['review_count'] is int
-          ? json['review_count']
-          : int.parse((json['review_count'] ?? 0).toString()),
+  const AddReviewScreen({super.key, required this.request});
+
+  @override
+  State<AddReviewScreen> createState() => _AddReviewScreenState();
+}
+
+class _AddReviewScreenState extends State<AddReviewScreen> {
+  final CustomerService _customerService = CustomerService();
+  final _commentController = TextEditingController();
+  int _selectedRating = 5;
+  bool _isSubmitting = false;
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    super.dispose();
+  }
+
+  Future<void> _submitReview() async {
+    final token = Provider.of<AuthProvider>(context, listen: false).token;
+    if (token == null) return;
+
+    setState(() => _isSubmitting = true);
+
+    try {
+      await _customerService.addReview(
+        token,
+        requestId: widget.request.id,
+        rating: _selectedRating,
+        comment: _commentController.text.trim().isEmpty ? null : _commentController.text.trim(),
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Review submitted successfully!')),
+        );
+        Navigator.pop(context, true);
+      }
+    } catch (e) {
+      if (mounted) {
+        final msg = e.toString().replaceAll('Exception: ', '');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(msg), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) {
+        setState(() => _isSubmitting = false);
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).cardColor,
+        elevation: 0,
+        title: const Text('Leave Shop Review', style: TextStyle(fontWeight: FontWeight.bold)),
+      ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            // Vendor Summary Card
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xffCCCCCC)),
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    widget.request.shopName,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xff212121),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    'Component: ${widget.request.modelName}',
+                    style: TextStyle(color: Colors.grey.shade400, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 24),
+
+            // Rating Selector Container
+            Container(
+              padding: const EdgeInsets.all(20.0),
+              decoration: BoxDecoration(
+                color: Theme.of(context).cardColor,
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: const Color(0xffCCCCCC)),
+              ),
+              child: Column(
+                children: [
+                  const Text(
+                    'Rate Your Experience',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Color(0xff212121)),
+                  ),
+                  const SizedBox(height: 14),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      final starValue = index + 1;
+                      return IconButton(
+                        iconSize: 40,
+                        icon: Icon(
+                          starValue <= _selectedRating ? Icons.star_rounded : Icons.star_outline_rounded,
+                          color: Colors.amber,
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            _selectedRating = starValue;
+                          });
+                        },
+                      );
+                    }),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    '$_selectedRating / 5 Stars',
+                    style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.amber),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20),
+
+            // Comment Field
+            TextFormField(
+              controller: _commentController,
+              style: const TextStyle(color: Color(0xff212121)),
+              maxLines: 4,
+              decoration: InputDecoration(
+                labelText: 'Comment / Review (Optional)',
+                hintText: 'Share details about part condition, vendor response time, etc.',
+                labelStyle: const TextStyle(color: Colors.grey),
+                hintStyle: TextStyle(color: Colors.grey.shade600),
+                filled: true,
+                fillColor: Theme.of(context).cardColor,
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Color(0xffCCCCCC)),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.amber),
+                ),
+              ),
+            ),
+            const SizedBox(height: 28),
+
+            SizedBox(
+              height: 50,
+              child: ElevatedButton(
+                onPressed: _isSubmitting ? null : _submitReview,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.amber,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                ),
+                child: _isSubmitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(strokeWidth: 2, color: Colors.black),
+                      )
+                    : const Text('Submit Review', style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16)),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

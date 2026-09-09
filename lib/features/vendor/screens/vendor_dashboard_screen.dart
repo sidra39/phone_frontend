@@ -47,7 +47,7 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
   void initState() {
     super.initState();
     _currentIndex = widget.initialIndex;
-    _start15SecondSecurityDepositTimer();
+    _start1MinuteSecurityDepositTimer();
   }
 
   @override
@@ -56,9 +56,9 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
     super.dispose();
   }
 
-  void _start15SecondSecurityDepositTimer() {
+  void _start1MinuteSecurityDepositTimer() {
     _depositPopupTimer?.cancel();
-    _depositPopupTimer = Timer(const Duration(seconds: 15), () {
+    _depositPopupTimer = Timer(const Duration(seconds: 60), () {
       if (mounted && !_hasPopupBeenShown) {
         _checkAndShowSecurityDepositPopup();
       }
@@ -86,7 +86,7 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
     final user = authProvider.user;
 
     final depositAmount = user?.securityDepositAmount ?? 500.00;
-    const depositPhone = '+92 311 7595866';
+    const depositPhone = '03080780593';
 
     showModalBottomSheet(
       context: context,
@@ -149,7 +149,7 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
                 child: Column(
                   children: [
                     const Text(
-                      'Please send the refundable Security Deposit to the number below via JazzCash or EasyPaisa ONLY. Once deposited, your vendor account will be enabled to respond to customer leads.',
+                      'Please send the refundable Security Deposit to the number below via JazzCash ONLY. Once deposited, your vendor account will be enabled to respond to customer leads.',
                       textAlign: TextAlign.center,
                       style: TextStyle(fontSize: 13, height: 1.4, fontWeight: FontWeight.w500),
                     ),
@@ -194,7 +194,7 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
                     ),
                     const SizedBox(height: 8),
                     const Text(
-                      'Accepted Payment Methods: JazzCash & EasyPaisa ONLY',
+                      'Accepted Payment Method: JazzCash ONLY',
                       style: TextStyle(fontSize: 11, color: Colors.grey, fontWeight: FontWeight.bold),
                     ),
                   ],
@@ -259,7 +259,7 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
             mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
-                'Select a clear screenshot or photo of your JazzCash/EasyPaisa deposit receipt:',
+                'Select a clear screenshot or photo of your JazzCash deposit receipt:',
                 style: TextStyle(fontSize: 13, color: Colors.grey),
               ),
               const SizedBox(height: 14),
@@ -456,8 +456,4 @@ class VendorDashboardScreenState extends State<VendorDashboardScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

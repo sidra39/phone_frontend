@@ -358,8 +358,4 @@ class _VendorProfileScreenState extends State<VendorProfileScreen> {
                 ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

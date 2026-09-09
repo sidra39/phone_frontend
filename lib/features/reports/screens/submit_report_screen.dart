@@ -97,7 +97,7 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Help keep Phone Parts Finder safe by reporting policy violations or fraudulent activity.',
+                'Help keep Mobile Part Finder safe by reporting policy violations or fraudulent activity.',
                 style: Theme.of(context).textTheme.bodyMedium,
               ),
               const SizedBox(height: 24),
@@ -144,8 +144,4 @@ class _SubmitReportScreenState extends State<SubmitReportScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

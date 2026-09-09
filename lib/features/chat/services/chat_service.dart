@@ -31,18 +31,18 @@ class ChatRoomModel {
 
   factory ChatRoomModel.fromJson(Map<String, dynamic> json) {
     return ChatRoomModel(
-      id: json['id'],
-      customerId: json['customer_id'],
-      vendorId: json['vendor_id'],
-      partId: json['part_id'],
+      id: json['id'] is int ? json['id'] : int.parse(json['id'].toString()),
+      customerId: json['customer_id'] is int ? json['customer_id'] : int.parse(json['customer_id'].toString()),
+      vendorId: json['vendor_id'] is int ? json['vendor_id'] : int.parse(json['vendor_id'].toString()),
+      partId: json['part_id'] is int ? json['part_id'] : int.parse(json['part_id'].toString()),
       modelName: json['model_name'] ?? 'Part listing',
       brandName: json['brand_name'],
       imageUrl: json['image_url'],
-      otherName: json['other_name'] ?? json['customer_name'] ?? json['vendor_shop_name'],
+      otherName: json['other_name'] ?? json['customer_name'] ?? json['vendor_shop_name'] ?? 'Direct Message',
       otherCity: json['other_city'],
       customerName: json['customer_name'],
       vendorShopName: json['vendor_shop_name'],
-      createdAt: json['created_at'],
+      createdAt: json['created_at'] != null ? json['created_at'].toString() : '',
     );
   }
 }
@@ -117,8 +117,4 @@ class ChatService {
     );
     return ChatMessageModel.fromJson(response['data']);
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

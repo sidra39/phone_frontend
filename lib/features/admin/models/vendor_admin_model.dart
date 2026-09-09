@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 /// VendorAdminModel
 /// Data model representing a vendor with linked user owner account details for admin management.
 class VendorAdminModel {
@@ -11,6 +10,8 @@ class VendorAdminModel {
   final String? securityDepositStatus;
   final String? securityDepositProof;
   final double? securityDepositAmount;
+  final String? shopPhotoUrl;
+  final String? cnicPhotoUrl;
   final String ownerName;
   final String email;
   final String? phone;
@@ -25,6 +26,8 @@ class VendorAdminModel {
     this.securityDepositStatus,
     this.securityDepositProof,
     this.securityDepositAmount,
+    this.shopPhotoUrl,
+    this.cnicPhotoUrl,
     required this.ownerName,
     required this.email,
     this.phone,
@@ -43,12 +46,11 @@ class VendorAdminModel {
       securityDepositAmount: json['security_deposit_amount'] != null
           ? double.tryParse(json['security_deposit_amount'].toString())
           : null,
+      shopPhotoUrl: json['shop_photo_url'] ?? json['verification_docs'],
+      cnicPhotoUrl: json['cnic_photo_url'],
       ownerName: json['owner_name'] ?? '',
       email: json['owner_email'] ?? '',
       phone: json['owner_phone'],
     );
   }
 }
-=======
-
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

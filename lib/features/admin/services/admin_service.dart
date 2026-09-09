@@ -183,8 +183,16 @@ class AdminService {
   Future<void> updateSystemSettings(String token, Map<String, dynamic> settings) async {
     await _apiClient.put('/admin/settings', settings, token: token);
   }
-<<<<<<< HEAD
+
+  /// Fetches system-wide notification log for admin audit
+  Future<List<Map<String, dynamic>>> getAllNotifications(String token) async {
+    final response = await _apiClient.get('/admin/notifications', token: token);
+    final List list = response['data'] ?? [];
+    return List<Map<String, dynamic>>.from(list);
+  }
+
+  /// Sends a broadcast system notification to users or groups
+  Future<void> broadcastNotification(String token, Map<String, dynamic> payload) async {
+    await _apiClient.post('/admin/notifications/broadcast', payload, token: token);
+  }
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

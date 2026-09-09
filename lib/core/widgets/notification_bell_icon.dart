@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../features/notifications/screens/notifications_screen.dart';
@@ -58,6 +57,3 @@ class NotificationBellIcon extends StatelessWidget {
     );
   }
 }
-=======
-
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

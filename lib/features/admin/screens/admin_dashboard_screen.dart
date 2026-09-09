@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/widgets/notification_bell_icon.dart';
@@ -12,6 +11,7 @@ import 'report_review_screen.dart';
 import 'user_management_screen.dart';
 import 'vendor_management_screen.dart';
 import 'system_settings_screen.dart';
+import 'admin_notification_center_screen.dart';
 import '../../chat/screens/chat_rooms_screen.dart';
 
 /// AdminDashboardScreen
@@ -35,6 +35,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     'Reports & Complaints',
     'Communication Oversight',
     'System Controls & Deposit',
+    'Notifications & Broadcast',
   ];
 
 
@@ -128,6 +129,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
       const ReportReviewScreen(),
       const ChatRoomsScreen(),
       const SystemSettingsScreen(),
+      const AdminNotificationCenterScreen(),
     ];
 
     return Scaffold(
@@ -292,6 +294,12 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                     index: 7,
                     accentColor: const Color(0xff757575),
                   ),
+                  _buildDrawerItem(
+                    icon: Icons.campaign_rounded,
+                    title: 'Notifications & Broadcast',
+                    index: 8,
+                    accentColor: const Color(0xff757575),
+                  ),
                 ],
               ),
             ),
@@ -333,6 +341,3 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     );
   }
 }
-=======
-
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

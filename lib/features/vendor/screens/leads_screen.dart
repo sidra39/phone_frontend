@@ -337,7 +337,12 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 ),
               ),
             ],
-            Text('Price: \$${lead.partPrice.toStringAsFixed(2)}'),
+            Text(
+              lead.deliveryType == 'home_delivery'
+                  ? 'Part Price: \$${lead.partPrice.toStringAsFixed(2)} | Delivery Fee: Rs. 200 | Total Bill: \$${(lead.partPrice + 200).toStringAsFixed(2)}'
+                  : 'Part Price: \$${lead.partPrice.toStringAsFixed(2)} (Shop Pickup)',
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
             const Divider(height: 24),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -442,8 +447,4 @@ class _LeadsScreenState extends State<LeadsScreen> {
                 ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

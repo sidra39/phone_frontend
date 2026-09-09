@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 /// AppLogo
@@ -50,7 +49,7 @@ class AppLogo extends StatelessWidget {
                   child: Padding(
                     padding: EdgeInsets.symmetric(horizontal: iconSize * 0.12),
                     child: Text(
-                      'PPF',
+                      'MPF',
                       style: TextStyle(
                         color: Colors.white,
                         fontSize: iconSize * 0.32,
@@ -77,7 +76,7 @@ class AppLogo extends StatelessWidget {
               ),
               children: [
                 const TextSpan(
-                  text: 'Phone Parts ',
+                  text: 'Mobile Part ',
                   style: TextStyle(color: Color(0xff0F172A)),
                 ),
                 TextSpan(
@@ -119,6 +118,3 @@ class _LogoPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
-=======
-
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

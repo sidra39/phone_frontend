@@ -10,6 +10,7 @@ import '../../browse/screens/part_detail_screen.dart';
 import 'register_customer_screen.dart';
 import 'register_vendor_screen.dart';
 import 'email_otp_verification_screen.dart';
+import 'forgot_password_screen.dart';
 
 /// LoginScreen
 /// Entry point for authenticating users featuring official PPF branding logo.
@@ -240,7 +241,25 @@ class _LoginScreenState extends State<LoginScreen> {
                           return null;
                         },
                       ),
-                      const SizedBox(height: 28),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => ForgotPasswordScreen(
+                                  initialEmail: _emailController.text.trim().isNotEmpty
+                                      ? _emailController.text.trim()
+                                      : null,
+                                ),
+                              ),
+                            );
+                          },
+                          child: const Text('Forgot Password?'),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
 
                       SizedBox(
                         width: double.infinity,
@@ -300,8 +319,4 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

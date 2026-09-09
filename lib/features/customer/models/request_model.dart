@@ -25,6 +25,8 @@ class RequestModel {
   final String? cancellationReason;
   final String? cancelledBy;
   final String? cancelledAt;
+  final double deliveryFee;
+  final double totalAmount;
 
   RequestModel({
     required this.id,
@@ -51,9 +53,16 @@ class RequestModel {
     this.cancellationReason,
     this.cancelledBy,
     this.cancelledAt,
+    this.deliveryFee = 0.0,
+    this.totalAmount = 0.0,
   });
 
   factory RequestModel.fromJson(Map<String, dynamic> json) {
+    final double itemPrice = json['price'] != null ? double.parse(json['price'].toString()) : 0.0;
+    final String delType = json['delivery_type'] ?? 'shop_pickup';
+    final double fee = json['delivery_fee'] != null ? double.parse(json['delivery_fee'].toString()) : (delType == 'home_delivery' ? 200.0 : 0.0);
+    final double total = json['total_amount'] != null ? double.parse(json['total_amount'].toString()) : (itemPrice + fee);
+
     return RequestModel(
       id: json['id'] is int ? json['id'] : int.parse(json['id'].toString()),
       partId: json['part_id'] is int ? json['part_id'] : int.parse(json['part_id'].toString()),
@@ -68,14 +77,14 @@ class RequestModel {
       status: json['status'] ?? 'requested',
       createdAt: json['created_at'] ?? '',
       modelName: json['model_name'] ?? 'Part #${json['part_id']}',
-      price: json['price'] != null ? double.parse(json['price'].toString()) : 0.0,
+      price: itemPrice,
       imageUrl: json['image_url'],
       shopName: json['shop_name'] ?? 'Vendor #${json['vendor_id']}',
       vendorCity: json['vendor_city'] ?? '',
       vendorAddress: json['vendor_address'] ?? '',
       brandName: json['brand_name'],
       partTypeName: json['part_type_name'],
-      deliveryType: json['delivery_type'] ?? 'shop_pickup',
+      deliveryType: delType,
       deliveryAddress: json['delivery_address'],
       deliveryCity: json['delivery_city'],
       deliveryPhone: json['delivery_phone'],
@@ -83,10 +92,8 @@ class RequestModel {
       cancellationReason: json['cancellation_reason'],
       cancelledBy: json['cancelled_by'],
       cancelledAt: json['cancelled_at'],
+      deliveryFee: fee,
+      totalAmount: total,
     );
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

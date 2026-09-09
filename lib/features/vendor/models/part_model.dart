@@ -46,7 +46,11 @@ class PartModel {
       modelName: json['model_name'] ?? '',
       price: json['price'] != null ? double.parse(json['price'].toString()) : 0.0,
       conditionType: json['condition_type'] ?? 'new',
-      stockQuantity: json['stock_quantity'] is int ? json['stock_quantity'] : int.parse(json['stock_quantity'].toString()),
+      stockQuantity: json['stock_quantity'] != null
+          ? (json['stock_quantity'] is int
+              ? json['stock_quantity']
+              : (int.tryParse(json['stock_quantity'].toString()) ?? 1))
+          : 1,
       imageUrl: json['image_url'],
       status: json['status'] ?? 'available',
       barcodeNumber: json['barcode_number'],
@@ -74,8 +78,4 @@ class PartModel {
       'barcode_photo_url': barcodePhotoUrl,
     };
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

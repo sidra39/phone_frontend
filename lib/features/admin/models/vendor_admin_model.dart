@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /// VendorAdminModel
 /// Data model representing a vendor with linked user owner account details for admin management.
 class VendorAdminModel {
@@ -48,3 +49,6 @@ class VendorAdminModel {
     );
   }
 }
+=======
+
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

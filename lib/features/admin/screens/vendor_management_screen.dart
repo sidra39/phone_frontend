@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../core/constants/api_constants.dart';
@@ -614,3 +615,6 @@ class _VendorManagementScreenState extends State<VendorManagementScreen> {
     );
   }
 }
+=======
+
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

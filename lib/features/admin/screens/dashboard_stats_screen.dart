@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../auth/services/auth_provider.dart';
@@ -341,3 +342,6 @@ class _DashboardStatsScreenState extends State<DashboardStatsScreen> {
     );
   }
 }
+=======
+
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

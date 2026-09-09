@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import 'package:flutter/material.dart';
 
 /// AppLogo
@@ -118,3 +119,6 @@ class _LogoPainter extends CustomPainter {
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
+=======
+
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

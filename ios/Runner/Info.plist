@@ -71,4 +71,8 @@
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>This app requires photo library access to upload product pictures and barcode labels.</string>
 </dict>
+<<<<<<< HEAD
 </plist>
+=======
+</plist>
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

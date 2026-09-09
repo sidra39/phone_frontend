@@ -183,4 +183,8 @@ class AdminService {
   Future<void> updateSystemSettings(String token, Map<String, dynamic> settings) async {
     await _apiClient.put('/admin/settings', settings, token: token);
   }
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

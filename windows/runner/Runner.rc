@@ -89,6 +89,7 @@ BEGIN
     BEGIN
         BLOCK "040904e4"
         BEGIN
+<<<<<<< HEAD
             VALUE "CompanyName", "com.example" "\0"
             VALUE "FileDescription", "phone_frontend" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
@@ -96,6 +97,15 @@ BEGIN
             VALUE "LegalCopyright", "Copyright (C) 2026 com.example. All rights reserved." "\0"
             VALUE "OriginalFilename", "phone_frontend.exe" "\0"
             VALUE "ProductName", "phone_frontend" "\0"
+=======
+            VALUE "CompanyName", "com.phonepartsfinder" "\0"
+            VALUE "FileDescription", "frontend" "\0"
+            VALUE "FileVersion", VERSION_AS_STRING "\0"
+            VALUE "InternalName", "frontend" "\0"
+            VALUE "LegalCopyright", "Copyright (C) 2026 com.phonepartsfinder. All rights reserved." "\0"
+            VALUE "OriginalFilename", "frontend.exe" "\0"
+            VALUE "ProductName", "frontend" "\0"
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

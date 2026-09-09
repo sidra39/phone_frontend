@@ -1,6 +1,11 @@
 {
+<<<<<<< HEAD
     "name": "phone_frontend",
     "short_name": "phone_frontend",
+=======
+    "name": "frontend",
+    "short_name": "frontend",
+>>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

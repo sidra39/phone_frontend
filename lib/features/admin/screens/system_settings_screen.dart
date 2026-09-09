@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../auth/services/auth_provider.dart';
@@ -48,7 +47,7 @@ class _SystemSettingsScreenState extends State<SystemSettingsScreen> {
       final settings = await _adminService.getSystemSettings(token);
       setState(() {
         _depositAmountController.text = (settings['security_deposit_amount'] ?? '500').toString();
-        _depositPhoneController.text = (settings['security_deposit_phone'] ?? '+92 311 7595866').toString();
+        _depositPhoneController.text = (settings['security_deposit_phone'] ?? '03080780593').toString();
         _commissionRateController.text = (settings['commission_rate_percent'] ?? '10').toString();
         _isLoading = false;
       });
@@ -186,8 +185,8 @@ class _SystemSettingsScreenState extends State<SystemSettingsScreen> {
                               controller: _depositPhoneController,
                               keyboardType: TextInputType.phone,
                               decoration: const InputDecoration(
-                                labelText: 'JazzCash & EasyPaisa Phone Number',
-                                hintText: '+92 311 7595866',
+                                labelText: 'JazzCash Phone Number',
+                                hintText: '03080780593',
                                 prefixIcon: Icon(Icons.phone_android_rounded, color: Color(0xff00E5FF)),
                               ),
                               validator: (val) {
@@ -260,6 +259,3 @@ class _SystemSettingsScreenState extends State<SystemSettingsScreen> {
     );
   }
 }
-=======
-
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

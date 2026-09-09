@@ -80,18 +80,18 @@ class AuthProvider extends ChangeNotifier {
     }
   }
 
-  /// Registers a vendor.
+  /// Registers a vendor with Shop Photo & CNIC Photo files
   Future<void> registerVendor({
     required String name,
     required String email,
     required String password,
     String? phone,
     required String shopName,
-    String? verificationDocs,
     required String city,
     required String address,
     double? latitude,
     double? longitude,
+    Map<String, Map<String, dynamic>>? files,
   }) async {
     _setLoading(true);
     try {
@@ -101,11 +101,11 @@ class AuthProvider extends ChangeNotifier {
         password: password,
         phone: phone,
         shopName: shopName,
-        verificationDocs: verificationDocs,
         city: city,
         address: address,
         latitude: latitude,
         longitude: longitude,
+        files: files,
       );
       _setLoading(false);
     } catch (e) {
@@ -171,8 +171,4 @@ class AuthProvider extends ChangeNotifier {
     await prefs.remove('user_data');
     notifyListeners();
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

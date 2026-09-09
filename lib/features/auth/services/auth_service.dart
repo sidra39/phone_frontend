@@ -43,32 +43,36 @@ class AuthService {
     });
   }
 
-  /// Registers a new vendor.
-  /// Calls POST /auth/register/vendor.
+  /// Registers a new vendor with Shop Photo & CNIC Photo files
   Future<dynamic> registerVendor({
     required String name,
     required String email,
     required String password,
     String? phone,
     required String shopName,
-    String? verificationDocs,
     required String city,
     required String address,
     double? latitude,
     double? longitude,
+    Map<String, Map<String, dynamic>>? files,
   }) async {
-    return await _apiClient.post('/auth/register/vendor', {
+    final fields = <String, String>{
       'name': name,
       'email': email,
       'password': password,
-      'phone': phone,
+      if (phone != null && phone.isNotEmpty) 'phone': phone,
       'shop_name': shopName,
-      'verification_docs': verificationDocs,
       'city': city,
       'address': address,
-      'latitude': latitude,
-      'longitude': longitude,
-    });
+      if (latitude != null) 'latitude': latitude.toString(),
+      if (longitude != null) 'longitude': longitude.toString(),
+    };
+
+    if (files != null && files.isNotEmpty) {
+      return await _apiClient.postMultipart('/auth/register/vendor', fields, files);
+    } else {
+      return await _apiClient.post('/auth/register/vendor', fields);
+    }
   }
 
   /// Requests a 6-digit OTP code to be sent via email
@@ -84,6 +88,20 @@ class AuthService {
     });
   }
 
+  /// Sends password reset OTP code to user's email
+  Future<dynamic> forgotPassword(String email) async {
+    return await _apiClient.post('/auth/forgot-password', {'email': email});
+  }
+
+  /// Resets user password using OTP code
+  Future<dynamic> resetPassword(String email, String otp, String newPassword) async {
+    return await _apiClient.post('/auth/reset-password', {
+      'email': email,
+      'otp': otp,
+      'new_password': newPassword,
+    });
+  }
+
   /// Fetches latest user profile from server
   Future<UserModel> getProfile(String token, String role) async {
     final endpoint = role == 'vendor' ? '/vendor/profile' : '/customer/profile';
@@ -91,8 +109,4 @@ class AuthService {
     final data = res['data'];
     return UserModel.fromJson(data);
   }
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> 933e2ef9672b79d50dcca3f1bc1666d87b0e4a02

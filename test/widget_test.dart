@@ -1,30 +1,28 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:phone_frontend/main.dart';
+import 'package:frontend/main.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('SplashScreen loads and transitions to BrowseHomeScreen', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({});
+
+    // Build app with SplashScreen
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // Verify splash screen displays app branding
+    expect(find.textContaining('Phone Parts'), findsWidgets);
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
+    // Advance splash screen timer (2200ms)
+    await tester.pump(const Duration(milliseconds: 2200));
+
+    // Allow SharedPreferences async futures to resolve
+    await tester.idle();
+
+    // Pump transition frame
     await tester.pump();
+    await tester.pump(const Duration(milliseconds: 700));
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that BrowseHomeScreen text is displayed
+    expect(find.text('Login'), findsOneWidget);
   });
 }
